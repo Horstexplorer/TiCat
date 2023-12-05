@@ -1,0 +1,22 @@
+# user specifiable configurations go here
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          client-id: TiCat
+          role:
+            admin: TiCat_admin
+            user: TiCat_user
+          issuer-uri:  http://localhost:8080/realms/TiCat
+          jwk-set-uri: http://localhost:8080/realms/TiCat/protocol/openid-connect/certs
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ticat
+    username: ticat
+    password: ticatsupersecret
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

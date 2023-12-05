@@ -1,0 +1,41 @@
+# internal configurations go here
+
+spring:
+  application:
+    name: "TiCat-Server"
+  config:
+    additional-location: "file:./,file:./config/"
+  mvc:
+    throw-exception-if-no-handler-found: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      pool-name: "TiCat-Server-Connection-Pool"
+      max-lifetime: 2000000
+      connection-timeout: 30000
+  flyway:
+    enabled: true
+  jpa:
+    properties:
+      hibernate:
+        create_empty_composites:
+          enabled: true
+  cloud:
+    vault:
+      enabled: false
+
+server:
+  port: 9090
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    context-path: "/api"
+springdoc:
+  api-docs:
+    path: "/docs/openapi"
+  swagger-ui:
+    path: "/docs/swagger-ui"
