@@ -10,9 +10,9 @@ import de.hypercdn.ticat.server.data.sql.entities.ticket.history.TicketHistory
 import java.time.OffsetDateTime
 import java.util.*
 
-class TicketHistoryResponseJson(
-    val history: TicketHistory? = null
-) {
+class TicketHistoryResponseJson {
+
+    companion object
 
     @JsonProperty(value = "uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)

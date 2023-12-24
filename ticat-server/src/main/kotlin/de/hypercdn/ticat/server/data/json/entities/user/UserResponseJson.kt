@@ -7,10 +7,9 @@ import de.hypercdn.ticat.server.data.sql.entities.user.User
 import java.time.OffsetDateTime
 import java.util.*
 
-class UserResponseJson(
-    @JsonIgnore
-    val user: User? = null
-) {
+class UserResponseJson {
+
+    companion object
 
     @JsonProperty(value = "uuid", required = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)

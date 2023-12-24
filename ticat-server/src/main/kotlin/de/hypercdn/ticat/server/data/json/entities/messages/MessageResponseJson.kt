@@ -11,10 +11,9 @@ import de.hypercdn.ticat.server.data.sql.entities.messages.Message
 import java.time.OffsetDateTime
 import java.util.*
 
-class MessageResponseJson(
-    @JsonIgnore
-    val message: Message? = null
-) {
+class MessageResponseJson {
+
+    companion object
 
     @JsonProperty(value = "uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)

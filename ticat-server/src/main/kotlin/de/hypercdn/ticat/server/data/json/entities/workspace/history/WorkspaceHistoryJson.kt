@@ -9,10 +9,9 @@ import de.hypercdn.ticat.server.data.sql.entities.workspace.history.WorkspaceHis
 import java.time.OffsetDateTime
 import java.util.UUID
 
-class WorkspaceHistoryJson(
-    @JsonIgnore
-    val history: WorkspaceHistory? = null
-) {
+class WorkspaceHistoryJson {
+
+    companion object
 
     @JsonProperty(value = "uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)

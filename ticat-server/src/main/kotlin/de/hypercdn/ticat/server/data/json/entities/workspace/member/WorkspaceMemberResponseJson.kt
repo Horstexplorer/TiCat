@@ -8,10 +8,9 @@ import de.hypercdn.ticat.server.data.json.entities.workspace.WorkspaceResponseJs
 import de.hypercdn.ticat.server.data.sql.entities.workspace.member.WorkspaceMember
 import java.time.OffsetDateTime
 
-class WorkspaceMemberResponseJson(
-    @JsonIgnore
-    val workspaceMember: WorkspaceMember? = null
-) {
+class WorkspaceMemberResponseJson {
+
+    companion object
 
     @JsonProperty(value = "user", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)

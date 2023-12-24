@@ -9,10 +9,9 @@ import de.hypercdn.ticat.server.data.sql.entities.page.Page
 import java.time.OffsetDateTime
 import java.util.UUID
 
-class PageResponseJson(
-    @JsonIgnore
-    var page: Page? = null
-) {
+class PageResponseJson {
+
+    companion object
 
     @JsonProperty(value = "uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)

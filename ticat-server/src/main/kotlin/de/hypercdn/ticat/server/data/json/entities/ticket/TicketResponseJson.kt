@@ -16,6 +16,8 @@ class TicketResponseJson(
     val ticket: Ticket? = null
 ) {
 
+    companion object
+
     @JsonProperty(value = "uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var uuid: UUID? = null

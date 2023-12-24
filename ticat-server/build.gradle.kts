@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.1.5"
+	id("org.springframework.boot") version "3.2.1"
 	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.20"
-	kotlin("plugin.spring") version "2.0.0-Beta1"
-	kotlin("plugin.jpa") version "2.0.0-Beta1"
+	kotlin("jvm") version "1.9.22"
+	kotlin("plugin.spring") version "2.0.0-Beta2"
+	kotlin("plugin.jpa") version "2.0.0-Beta2"
 }
 
 group = "de.hypercdn.ticat"
@@ -48,7 +48,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-core:2.16.0")
 	implementation("com.fasterxml.jackson.core:jackson-annotations:2.16.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("com.google.guava:guava:32.1.3-jre")
+	implementation("com.google.guava:guava:33.0.0-jre")
 	implementation("org.springframework.vault:spring-vault-core:3.1.0")
 
 

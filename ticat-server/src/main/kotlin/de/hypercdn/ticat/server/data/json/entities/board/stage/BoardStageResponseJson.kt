@@ -9,10 +9,9 @@ import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
 import java.time.OffsetDateTime
 import java.util.*
 
-class BoardStageResponseJson(
-    @JsonIgnore
-    val boardStage: BoardStage? = null
-) {
+class BoardStageResponseJson {
+
+    companion object
 
     @JsonProperty(value = "uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
