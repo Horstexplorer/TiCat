@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import de.hypercdn.ticat.server.data.json.entities.board.BoardResponseJson
 import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJson
+import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJson
+import de.hypercdn.ticat.server.data.json.entities.ticket.history.TicketHistoryResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
+import de.hypercdn.ticat.server.data.json.entities.workspace.history.WorkspaceHistoryResponseJson
 import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import java.time.OffsetDateTime
@@ -25,10 +28,6 @@ class TicketResponseJson(
     @JsonProperty(value = "board", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var board: BoardResponseJson? = null
-
-    @JsonProperty(value = "board_stage", required = false)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    var boardStage: BoardStage? = null
 
     @JsonProperty(value = "series_id", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -56,13 +55,13 @@ class TicketResponseJson(
         @JsonInclude(JsonInclude.Include.NON_NULL)
         var status: Ticket.Settings.Status? = null
 
-        @JsonProperty(value = "setting_board_stage", required = false)
+        @JsonProperty(value = "setting_board_stage_uuid", required = false)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        var boardStage: BoardStageResponseJson? = null
+        var boardStageUUID: UUID? = null
 
-        @JsonProperty(value = "setting_assignee", required = false)
+        @JsonProperty(value = "setting_assignee_uuid", required = false)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        var assignee: UserResponseJson? = null
+        var assigneeUUID: UUID? = null
 
     }
 
@@ -73,5 +72,9 @@ class TicketResponseJson(
     @JsonProperty(value = "content", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var content: String? = null
+
+    @JsonProperty(value = "entity_history", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var history: List<TicketHistoryResponseJsonBuilder>? = null
 
 }

@@ -32,6 +32,10 @@ class WorkspaceMemberResponseJson {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var permissions: Permissions? = null
 
+    @JsonProperty(value = "effective_permissions", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var effectivePermission: Permissions? = null
+
     class Permissions {
 
         @JsonProperty(value = "permission_pages", required = false)

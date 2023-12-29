@@ -2,9 +2,12 @@ package de.hypercdn.ticat.server.data.json.entities.board
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJson
+import de.hypercdn.ticat.server.data.json.entities.messages.MessageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.workspace.WorkspaceResponseJson
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
+import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -47,5 +50,17 @@ class BoardResponseJson{
     @JsonProperty(value = "title", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var title: String? = null
+
+    @JsonProperty(value = "entity_children", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var childEntities: ChildEntities? = null
+
+    class ChildEntities {
+
+        @JsonProperty(value = "stages", required = false)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var stages: List<BoardStageResponseJson>? = null
+
+    }
 
 }

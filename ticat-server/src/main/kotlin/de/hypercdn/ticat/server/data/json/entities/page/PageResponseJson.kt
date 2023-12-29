@@ -3,8 +3,11 @@ package de.hypercdn.ticat.server.data.json.entities.page
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import de.hypercdn.ticat.server.data.json.entities.board.BoardResponseJson
+import de.hypercdn.ticat.server.data.json.entities.page.history.PageHistoryResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.workspace.WorkspaceResponseJson
+import de.hypercdn.ticat.server.data.json.entities.workspace.history.WorkspaceHistoryResponseJson
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
 import java.time.OffsetDateTime
 import java.util.UUID
@@ -57,8 +60,20 @@ class PageResponseJson {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var content: String? = null
 
-    @JsonProperty(value = "child_pages", required = false)
+    @JsonProperty(value = "entity_children", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    var childPages: List<PageResponseJson>? = null
+    var childEntities: ChildEntities? = null
+
+    class ChildEntities {
+
+        @JsonProperty(value = "pages", required = false)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var pages: List<PageResponseJson>? = null
+
+    }
+
+    @JsonProperty(value = "entity_history", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var history: List<PageHistoryResponseJson>? = null
 
 }

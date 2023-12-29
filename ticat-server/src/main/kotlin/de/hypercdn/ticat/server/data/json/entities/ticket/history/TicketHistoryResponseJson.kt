@@ -46,12 +46,12 @@ class TicketHistoryResponseJson {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var oldStatus: Ticket.Settings.Status? = null
 
-    @JsonProperty(value = "old_board_stage", required = false)
+    @JsonProperty(value = "old_board_stage_uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    var oldBoardStage: BoardStageResponseJson? = null
+    var oldBoardStageUUID: UUID? = null
 
-    @JsonProperty(value = "old_assignee", required = false)
+    @JsonProperty(value = "old_assignee_uuid", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    var oldAssignee: UserResponseJson? = null
+    var oldAssigneeUUID: UUID? = null
 
 }

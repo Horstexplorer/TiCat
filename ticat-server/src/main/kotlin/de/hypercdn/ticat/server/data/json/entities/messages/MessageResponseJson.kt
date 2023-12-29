@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJson
+import de.hypercdn.ticat.server.data.json.entities.page.history.PageHistoryResponseJson
 import de.hypercdn.ticat.server.data.json.entities.ticket.TicketResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.workspace.WorkspaceResponseJson
@@ -51,14 +52,6 @@ class MessageResponseJson {
 
     }
 
-    @JsonProperty(value = "parent_message", required = false)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    var parentMessage: MessageResponseJson? = null
-
-    @JsonProperty(value = "child_messages", required = false)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    var childMessages: List<MessageResponseJson>? = null
-
     @JsonProperty(value = "settings", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var settings: Settings? = null
@@ -74,5 +67,25 @@ class MessageResponseJson {
     @JsonProperty(value = "content", required = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var content: String? = null
+
+    @JsonProperty(value = "entity_parent", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var parentMessage: MessageResponseJson? = null
+
+    @JsonProperty(value = "entity_children", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var childEntities: ChildEntities? = null
+
+    class ChildEntities {
+
+        @JsonProperty(value = "messages", required = false)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var messages: List<MessageResponseJson>? = null
+
+    }
+
+    @JsonProperty(value = "entity_history", required = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var history: List<MessageResponseJson>? = null
 
 }
