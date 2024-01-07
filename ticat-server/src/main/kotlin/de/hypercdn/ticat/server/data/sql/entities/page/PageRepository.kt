@@ -10,6 +10,6 @@ interface PageRepository : CrudRepository<Page, UUID> {
 
     fun getPagesByWorkspace(workspace: Workspace): List<Page>
 
-    fun getPagesByParentPage(parentPage: Page): List<Page>
+    fun getPagesBySettingsParentPage(parentPage: Page): List<Page>
 
 }

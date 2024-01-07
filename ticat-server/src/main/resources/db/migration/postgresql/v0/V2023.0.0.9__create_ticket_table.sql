@@ -28,7 +28,7 @@ CREATE TABLE tickets
             ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT board_stage_fk
-        FOREIGN KEY (board_stage_uuid)
+        FOREIGN KEY (setting_board_stage_uuid)
             REFERENCES board_stages (board_stage_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,

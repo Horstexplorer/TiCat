@@ -3,17 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.2.1"
 	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.22"
+	kotlin("jvm") version "2.0.0-Beta2"
 	kotlin("plugin.spring") version "2.0.0-Beta2"
 	kotlin("plugin.jpa") version "2.0.0-Beta2"
 }
 
 group = "de.hypercdn.ticat"
 version = "0.0.1-SNAPSHOT"
-
-java {
-	sourceCompatibility = JavaVersion.VERSION_17
-}
 
 configurations {
 	compileOnly {
@@ -44,9 +40,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 
-	implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
-	implementation("com.fasterxml.jackson.core:jackson-core:2.16.0")
-	implementation("com.fasterxml.jackson.core:jackson-annotations:2.16.0")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+	implementation("com.fasterxml.jackson.core:jackson-core:2.16.1")
+	implementation("com.fasterxml.jackson.core:jackson-annotations:2.16.1")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.google.guava:guava:33.0.0-jre")
 	implementation("org.springframework.vault:spring-vault-core:3.1.0")
@@ -54,7 +50,7 @@ dependencies {
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib")
-	implementation("io.github.microutils:kotlin-logging:3.0.5")
+	implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
 
 	implementation("org.springframework.session:spring-session-jdbc")
@@ -70,6 +66,11 @@ dependencies {
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<KotlinCompile> {

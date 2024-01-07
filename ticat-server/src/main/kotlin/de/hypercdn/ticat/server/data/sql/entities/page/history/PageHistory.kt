@@ -47,7 +47,7 @@ class PageHistory : CopyConstructable<PageHistory> {
         updatable = false
     )
     @JsonIgnore
-    var page: Page? = null
+    lateinit var page: Page
 
     @Column(
         name = "version_id",

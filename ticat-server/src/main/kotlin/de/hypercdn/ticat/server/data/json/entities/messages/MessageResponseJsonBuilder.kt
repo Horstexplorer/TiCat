@@ -41,29 +41,29 @@ class MessageResponseJsonBuilder(
         private val recipient: Message.Recipient? = null
     ): EntityTemplateBuilder<MessageRecipientJsonBuilder, MessageResponseJson.Recipient>({ MessageResponseJson.Recipient() }) {
 
-        fun includeWorkspace(skip: Boolean = false, workspace: Workspace? = recipient?.workspace, configurator: (WorkspaceResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
-            it.workspace = WorkspaceResponseJson.builder(workspace)
-                .apply(configurator)
-                .build()
-        }
-
-        fun includePage(skip: Boolean = false, page: Page? = recipient?.page, configurator: (PageResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
-            it.page = PageResponseJson.builder(page)
-                .apply(configurator)
-                .build()
-        }
-
-        fun includeTicket(skip: Boolean = false, ticket: Ticket? = recipient?.ticket, configurator: (TicketResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
-            it.ticket = TicketResponseJson.builder(ticket)
-                .apply(configurator)
-                .build()
-        }
-
-        fun includeUser(skip: Boolean = false, user: User? = recipient?.user, configurator: (UserResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
-            it.user = UserResponseJson.builder(user)
-                .apply(configurator)
-                .build()
-        }
+//        fun includeWorkspace(skip: Boolean = false, workspace: Workspace? = recipient?.workspace, configurator: (WorkspaceResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
+//            it.workspace = WorkspaceResponseJson.builder(workspace)
+//                .apply(configurator)
+//                .build()
+//        }
+//
+//        fun includePage(skip: Boolean = false, page: Page? = recipient?.page, configurator: (PageResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
+//            it.page = PageResponseJson.builder(page)
+//                .apply(configurator)
+//                .build()
+//        }
+//
+//        fun includeTicket(skip: Boolean = false, ticket: Ticket? = recipient?.ticket, configurator: (TicketResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
+//            it.ticket = TicketResponseJson.builder(ticket)
+//                .apply(configurator)
+//                .build()
+//        }
+//
+//        fun includeUser(skip: Boolean = false, user: User? = recipient?.user, configurator: (UserResponseJsonBuilder) -> Unit): MessageRecipientJsonBuilder = modify(skip) {
+//            it.user = UserResponseJson.builder(user)
+//                .apply(configurator)
+//                .build()
+//        }
 
     }
 

@@ -97,6 +97,18 @@ class Page : CopyConstructable<Page> {
     @JsonIgnore
     var editor: User? = null
 
+    @Column(
+        name = "title"
+    )
+    @ColumnDefault("NULL")
+    var title: String? = null
+
+    @Column(
+        name = "content"
+    )
+    @ColumnDefault("NULL")
+    var content: String? = null
+
     @Embedded
     var settings: Settings = Settings()
 
@@ -143,18 +155,6 @@ class Page : CopyConstructable<Page> {
 
     }
 
-    @Column(
-        name = "title"
-    )
-    @ColumnDefault("NULL")
-    var title: String? = null
-
-    @Column(
-        name = "content"
-    )
-    @ColumnDefault("NULL")
-    var content: String? = null
-
     constructor()
 
     constructor(other: Page) {
@@ -168,9 +168,9 @@ class Page : CopyConstructable<Page> {
             this.modifiedAt = other.modifiedAt
         this.creatorUUID = other.creatorUUID
         this.editorUUID = other.editorUUID
-        this.settings = Settings(other.settings)
         this.title = other.title
         this.content = other.content
+        this.settings = Settings(other.settings)
     }
 
 }

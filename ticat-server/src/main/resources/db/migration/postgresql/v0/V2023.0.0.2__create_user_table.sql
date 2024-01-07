@@ -35,7 +35,7 @@ CREATE TABLE users
 
     PRIMARY KEY (user_uuid),
     CONSTRAINT unique_auth_subject_reference
-        UNIQUE NULLS NOT DISTINCT (auth_subject_reference)
+        UNIQUE NULLS DISTINCT (auth_subject_reference)
 );
 
 -- adds placeholder users

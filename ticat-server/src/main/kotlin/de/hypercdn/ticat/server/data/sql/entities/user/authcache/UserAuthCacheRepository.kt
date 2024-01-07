@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository
 interface UserAuthCacheRepository : CrudRepository<UserAuthCacheReference, UserAuthCacheReference.Key> {
 
     @Query("""
-        DELETE FROM UserAuthCacheReference uacr WHERE uacr.predictedExpiry < NOW()
+        DELETE FROM UserAuthCacheReference userAuthCacheRef 
+        WHERE CURRENT_TIMESTAMP > userAuthCacheRef.predictedExpiry
     """)
     fun deleteAllExpired()
 

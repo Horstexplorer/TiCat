@@ -14,7 +14,7 @@ import java.time.OffsetDateTime
 import java.util.*
 
 @Entity
-@Table(name = "pages")
+@Table(name = "tickets")
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
@@ -155,7 +155,7 @@ class Ticket {
             updatable = false
         )
         @JsonIgnore
-        lateinit var assignee: User
+        var assignee: User? = null
 
         constructor()
 

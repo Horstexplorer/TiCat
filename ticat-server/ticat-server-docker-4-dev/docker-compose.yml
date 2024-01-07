@@ -1,5 +1,4 @@
-version: '3.9'
-
+name: ticat
 services:
   ticat-dev-postgresql:
     image: bitnami/postgresql:16.1.0
@@ -16,15 +15,15 @@ services:
 
   ticat-dev-keycloak:
     container_name: ticat-dev-keycloak
-    image: bitnami/keycloak:22.0.5
+    image: bitnami/keycloak:23.0.3
     restart: unless-stopped
     depends_on:
-      - postgresql
+      - ticat-dev-postgresql
     environment:
       - KEYCLOAK_CREATE_ADMIN_USER=true
       - KEYCLOAK_ADMIN_USER=admin
       - KEYCLOAK_ADMIN_PASSWORD=adminsupersecret
-      - KEYCLOAK_DATABASE_HOST=postgresql
+      - KEYCLOAK_DATABASE_HOST=ticat-dev-postgresql
       - KEYCLOAK_DATABASE_PORT=5432
       - KEYCLOAK_DATABASE_NAME=keycloak
       - KEYCLOAK_DATABASE_USER=keycloak

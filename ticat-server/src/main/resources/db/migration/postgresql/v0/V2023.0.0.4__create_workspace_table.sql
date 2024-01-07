@@ -30,8 +30,8 @@ CREATE TABLE workspaces
         UNIQUE NULLS NOT DISTINCT (human_id),
     CONSTRAINT uppercase_human_id
         CHECK ( UPPER(human_id) = human_id AND human_id NOT LIKE '%[^A-Z0-9]%' ),
-    CONSTRAINT owner_fk
-        FOREIGN KEY (owner_uuid)
+    CONSTRAINT creator_fk
+        FOREIGN KEY (creator_uuid)
             REFERENCES users (user_uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE

@@ -9,10 +9,8 @@ import de.hypercdn.ticat.server.data.sql.entities.user.authcache.UserAuthCacheRe
 import de.hypercdn.ticat.server.data.sql.entities.user.authcache.UserAuthCacheReference
 import jakarta.transaction.Transactional
 import lombok.extern.slf4j.Slf4j
-import mu.KLogger
-import mu.KLogging
-import mu.KotlinLogging
-import mu.toKLogger
+import mu.two.KLogger
+import mu.two.KotlinLogging
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -107,7 +105,7 @@ class UserManagementService(
         currentContextIsAuthenticated() -> {
             if (currentContextJwtIsAlreadyKnown()) {
                 logger.debug{"Context is authenticated and jwt already known"}
-                userRepository.getUserByAuthReference(currentContextJwtAuthenticationToken().token.subject)
+                userRepository.getUserByAuthSubjectReference(currentContextJwtAuthenticationToken().token.subject)
             } else {
                 logger.debug{"Context is authenticated but jwt is not yet known - will update entity with new contents"}
                 userAuthCacheRepository.save(userAuthCacheReferenceFromCurrentContext())

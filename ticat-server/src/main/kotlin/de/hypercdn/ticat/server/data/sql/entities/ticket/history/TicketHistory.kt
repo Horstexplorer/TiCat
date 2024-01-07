@@ -66,7 +66,6 @@ class TicketHistory : CopyConstructable<PageHistory> {
     )
     var versionId: Int = -1
 
-
     @Column(
         name = "editor_uuid",
         nullable = false,

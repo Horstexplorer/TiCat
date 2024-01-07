@@ -27,7 +27,7 @@ class MessageHistory : CopyConstructable<PageHistory>  {
 
     @Id
     @Column(
-        name = "page_history_uuid",
+        name = "message_history_uuid",
         nullable = false,
         updatable = false
     )

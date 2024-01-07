@@ -38,7 +38,7 @@ class WorkspaceMember : CopyConstructable<WorkspaceMember> {
     lateinit var workspaceUUID: UUID
 
     @PrimaryKeyJoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(
         name = "workspace_uuid",
         referencedColumnName = "workspace_uuid",
@@ -58,7 +58,7 @@ class WorkspaceMember : CopyConstructable<WorkspaceMember> {
     lateinit var userUUID: UUID
 
     @PrimaryKeyJoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(
         name = "user_uuid",
         referencedColumnName = "user_uuid",

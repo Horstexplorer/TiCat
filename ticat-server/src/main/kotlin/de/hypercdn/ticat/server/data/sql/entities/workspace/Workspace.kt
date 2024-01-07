@@ -8,7 +8,6 @@ import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
-import org.hibernate.annotations.Cache
 import java.time.OffsetDateTime
 import java.util.UUID
 
@@ -36,7 +35,7 @@ class Workspace : CopyConstructable<Workspace> {
         nullable = false,
         updatable = false
     )
-    lateinit var hid: String
+    lateinit var humanId: String
 
     @Column(
         name = "created_at",
@@ -69,7 +68,6 @@ class Workspace : CopyConstructable<Workspace> {
         insertable = false,
         updatable = false
     )
-//    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY , includeLazy = true)
     @JsonIgnore
     lateinit var creator: User
 
@@ -165,8 +163,8 @@ class Workspace : CopyConstructable<Workspace> {
     constructor(other: Workspace) {
         if (other::uuid.isInitialized)
             this.uuid = other.uuid
-        if (other::hid.isInitialized)
-            this.hid = other.hid
+        if (other::humanId.isInitialized)
+            this.humanId = other.humanId
         if (other::createdAt.isInitialized)
             this.createdAt = other.createdAt
         if (other::modifiedAt.isInitialized)

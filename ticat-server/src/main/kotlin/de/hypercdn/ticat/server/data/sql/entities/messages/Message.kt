@@ -10,6 +10,7 @@ import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import jakarta.persistence.*
 import jakarta.persistence.Table
+import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.*
 import java.time.OffsetDateTime
 import java.util.*
@@ -25,33 +26,43 @@ class Message : CopyConstructable<Message> {
 
     @Id
     @Column(
-        name = "message_uuid", nullable = false, updatable = false
+        name = "message_uuid",
+        nullable = false,
+        updatable = false
     )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     lateinit var uuid: UUID
 
     @Column(
-        name = "created_at", nullable = false, updatable = false
+        name = "created_at",
+        nullable = false,
+        updatable = false
     )
     @ColumnDefault("NOW()")
     @CreationTimestamp
     lateinit var createdAt: OffsetDateTime
 
     @Column(
-        name = "modified_at", nullable = false
+        name = "modified_at",
+        nullable = false
     )
     @ColumnDefault("NOW()")
     @UpdateTimestamp
     lateinit var modifiedAt: OffsetDateTime
 
     @Column(
-        name = "sender_uuid", nullable = false, updatable = false
+        name = "sender_uuid",
+        nullable = false,
+        updatable = false
     )
     lateinit var senderUUID: UUID
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "sender_uuid", referencedColumnName = "user_uuid", insertable = false, updatable = false
+        name = "sender_uuid",
+        referencedColumnName = "user_uuid",
+        insertable = false,
+        updatable = false
     )
     @JsonIgnore
     lateinit var sender: User
@@ -77,7 +88,6 @@ class Message : CopyConstructable<Message> {
             insertable = false,
             updatable = false
         )
-        @JsonIgnore
         var workspace: Workspace? = null
 
         @Column(
@@ -125,7 +135,6 @@ class Message : CopyConstructable<Message> {
             insertable = false,
             updatable = false
         )
-        @JsonIgnore
         var user: User? = null
 
         constructor()
@@ -212,7 +221,7 @@ class Message : CopyConstructable<Message> {
             this.modifiedAt = other.modifiedAt
         if (other::senderUUID.isInitialized)
             this.senderUUID = other.senderUUID
-        this.recipient = Recipient(other.recipient)
+//        this.recipient = Recipient(other.recipient)
         this.parentMessageUUID = other.parentMessageUUID
         this.content = other.content
         this.settings = Settings(other.settings)

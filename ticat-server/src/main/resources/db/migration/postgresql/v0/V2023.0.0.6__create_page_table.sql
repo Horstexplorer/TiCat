@@ -36,7 +36,7 @@ CREATE TABLE pages
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT parent_page_fk
-        FOREIGN KEY (parent_page_uuid)
+        FOREIGN KEY (setting_parent_page_uuid)
             REFERENCES pages (page_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE

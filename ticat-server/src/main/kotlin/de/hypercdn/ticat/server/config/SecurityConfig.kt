@@ -23,40 +23,40 @@ class SecurityConfig {
                 // exposing the api documentation behind /docs
                 it.requestMatchers("/docs/**").permitAll()
                 // no auth or optional auth
-                it.requestMatchers(
-                    HttpMethod.GET,
-                    ""
-                ).permitAll()
-                it.requestMatchers(
-                    HttpMethod.POST,
-                    ""
-                ).permitAll()
-                it.requestMatchers(
-                    HttpMethod.PATCH,
-                    ""
-                ).permitAll()
-                it.requestMatchers(
-                    HttpMethod.DELETE,
-                    ""
-                ).permitAll()
+//                it.requestMatchers(
+//                    HttpMethod.GET,
+//                    ""
+//                ).permitAll()
+//                it.requestMatchers(
+//                    HttpMethod.POST,
+//                    ""
+//                ).permitAll()
+//                it.requestMatchers(
+//                    HttpMethod.PATCH,
+//                    ""
+//                ).permitAll()
+//                it.requestMatchers(
+//                    HttpMethod.DELETE,
+//                    ""
+//                ).permitAll()
 
                 // auth required
-                it.requestMatchers(
-                    HttpMethod.GET,
-                    ""
-                ).authenticated()
-                it.requestMatchers(
-                    HttpMethod.POST,
-                    ""
-                ).authenticated()
-                it.requestMatchers(
-                    HttpMethod.PATCH,
-                    ""
-                ).authenticated()
-                it.requestMatchers(
-                    HttpMethod.DELETE,
-                    ""
-                ).authenticated()
+//                it.requestMatchers(
+//                    HttpMethod.GET,
+//                    ""
+//                ).authenticated()
+//                it.requestMatchers(
+//                    HttpMethod.POST,
+//                    ""
+//                ).authenticated()
+//                it.requestMatchers(
+//                    HttpMethod.PATCH,
+//                    ""
+//                ).authenticated()
+//                it.requestMatchers(
+//                    HttpMethod.DELETE,
+//                    ""
+//                ).authenticated()
             }
             .oauth2ResourceServer {
                 it.jwt { }

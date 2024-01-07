@@ -7,6 +7,6 @@ import java.util.UUID
 @Repository
 interface WorkspaceRepository : CrudRepository<Workspace, UUID> {
 
-    fun getWorkspaceByHid(hid: String)
+    fun getWorkspaceByHumanId(humanId: String)
 
 }

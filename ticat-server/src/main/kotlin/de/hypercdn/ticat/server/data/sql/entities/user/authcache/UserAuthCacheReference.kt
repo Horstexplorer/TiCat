@@ -13,7 +13,6 @@ import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import java.io.Serializable
 import java.time.OffsetDateTime
-import java.util.*
 
 @Entity
 @IdClass(UserAuthCacheReference.Key::class)

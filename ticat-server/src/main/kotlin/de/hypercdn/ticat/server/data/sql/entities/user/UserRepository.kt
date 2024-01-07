@@ -7,6 +7,6 @@ import java.util.UUID
 @Repository
 interface UserRepository : CrudRepository<User, UUID> {
 
-    fun getUserByAuthReference(reference: String): User?
+    fun getUserByAuthSubjectReference(reference: String): User?
 
 }

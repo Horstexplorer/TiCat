@@ -16,7 +16,7 @@ class WorkspaceResponseJsonBuilder(
     }
 
     fun includeHumanId(skip: Boolean = false): WorkspaceResponseJsonBuilder = modify(skip) {
-        it.hid = workspace?.hid
+        it.hid = workspace?.humanId
     }
 
     fun includeVersionTimestamp(skip: Boolean = false): WorkspaceResponseJsonBuilder = modify(skip) {

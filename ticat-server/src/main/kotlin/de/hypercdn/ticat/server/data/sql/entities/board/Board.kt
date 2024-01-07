@@ -97,6 +97,12 @@ class Board : CopyConstructable<Board> {
     @JsonIgnore
     var editor: User? = null
 
+    @Column(
+        name = "title"
+    )
+    @ColumnDefault("NULL")
+    var title: String? = null
+
     @Embedded
     var settings: Settings = Settings()
 
@@ -127,12 +133,6 @@ class Board : CopyConstructable<Board> {
 
     }
 
-    @Column(
-        name = "title"
-    )
-    @ColumnDefault("NULL")
-    var title: String? = null
-
     constructor()
 
     constructor(other: Board) {
@@ -147,8 +147,8 @@ class Board : CopyConstructable<Board> {
         if (other::creatorUUID.isInitialized)
             this.creatorUUID = other.creatorUUID
         this.editorUUID = other.editorUUID
-        this.settings = Settings(other.settings)
         this.title = other.title
+        this.settings = Settings(other.settings)
     }
 
 }
