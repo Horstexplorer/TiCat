@@ -132,7 +132,7 @@ class Ticket {
         @ColumnDefault("NULL")
         var stageUUID: UUID? = null
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "setting_board_stage_uuid",
             referencedColumnName = "board_stage_uuid",

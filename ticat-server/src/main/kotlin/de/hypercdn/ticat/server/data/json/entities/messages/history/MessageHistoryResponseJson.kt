@@ -1,12 +1,10 @@
 package de.hypercdn.ticat.server.data.json.entities.messages.history
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import de.hypercdn.ticat.server.data.json.entities.messages.MessageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
-import de.hypercdn.ticat.server.data.sql.entities.messages.Message
-import de.hypercdn.ticat.server.data.sql.entities.messages.history.MessageHistory
+import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import java.time.OffsetDateTime
 import java.util.*
 

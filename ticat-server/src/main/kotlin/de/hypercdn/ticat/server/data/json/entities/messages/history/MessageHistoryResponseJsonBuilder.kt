@@ -7,8 +7,8 @@ import de.hypercdn.ticat.server.data.json.entities.messages.builder
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.builder
-import de.hypercdn.ticat.server.data.sql.entities.messages.Message
-import de.hypercdn.ticat.server.data.sql.entities.messages.history.MessageHistory
+import de.hypercdn.ticat.server.data.sql.entities.message.Message
+import de.hypercdn.ticat.server.data.sql.entities.message.history.MessageHistory
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 
 class MessageHistoryResponseJsonBuilder(

@@ -1,6 +1,6 @@
-package de.hypercdn.ticat.server.data.sql.entities.messages.history
+package de.hypercdn.ticat.server.data.sql.entities.message.history
 
-import de.hypercdn.ticat.server.data.sql.entities.messages.Message
+import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID

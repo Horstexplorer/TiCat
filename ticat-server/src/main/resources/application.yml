@@ -12,21 +12,19 @@ spring:
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20
-      idle-timeout: 30000
+      idle-timeout: 30_000
       pool-name: "TiCat-Server-Connection-Pool"
-      max-lifetime: 2000000
-      connection-timeout: 30000
+      max-lifetime: 1800_000
+      connection-timeout: 30_000
   flyway:
     enabled: true
   jpa:
     properties:
-      hibernate:
-        create_empty_composites:
-          enabled: true
-  cloud:
-    vault:
-      enabled: false
-
+#      hibernate.create_empty_composites.enabled: true
+#      hibernate.type.preferred_uuid_jdbc_type: char
+#  cloud:
+#    vault:
+#      enabled: false
 server:
   port: 9090
   error:
@@ -37,5 +35,8 @@ server:
 springdoc:
   api-docs:
     path: "/docs/openapi"
-  swagger-ui:
-    path: "/docs/swagger-ui"
+#  swagger-ui:
+#    path: "/docs/swagger-ui"
+#logging:
+#  level:
+#    root: trace

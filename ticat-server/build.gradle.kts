@@ -52,9 +52,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib")
 	implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
-
-	implementation("org.springframework.session:spring-session-jdbc")
-
 	compileOnly("org.projectlombok:lombok")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -70,7 +67,7 @@ dependencies {
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = sourceCompatibility
 }
 
 tasks.withType<KotlinCompile> {

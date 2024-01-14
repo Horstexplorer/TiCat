@@ -1,4 +1,4 @@
-package de.hypercdn.ticat.server.data.sql.entities.messages
+package de.hypercdn.ticat.server.data.sql.entities.message
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -10,7 +10,6 @@ import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import jakarta.persistence.*
 import jakarta.persistence.Table
-import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.*
 import java.time.OffsetDateTime
 import java.util.*
@@ -81,13 +80,13 @@ class Message : CopyConstructable<Message> {
         @ColumnDefault("NULL")
         var workspaceUUID: UUID? = null
 
-        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "recipient_workspace_uuid",
             referencedColumnName = "workspace_uuid",
             insertable = false,
             updatable = false
         )
+        @ManyToOne(fetch = FetchType.LAZY)
         var workspace: Workspace? = null
 
         @Column(
@@ -156,23 +155,13 @@ class Message : CopyConstructable<Message> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "message_uuid",
-        referencedColumnName = "parent_message_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var parentMessage: Message? = null
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(
         name = "parent_message_uuid",
         referencedColumnName = "message_uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
-    var childMessages: List<Message>? = null
+    var parentMessage: Message? = null
 
     @Column(
         name = "content",
@@ -221,7 +210,7 @@ class Message : CopyConstructable<Message> {
             this.modifiedAt = other.modifiedAt
         if (other::senderUUID.isInitialized)
             this.senderUUID = other.senderUUID
-//        this.recipient = Recipient(other.recipient)
+        this.recipient = Recipient(other.recipient)
         this.parentMessageUUID = other.parentMessageUUID
         this.content = other.content
         this.settings = Settings(other.settings)

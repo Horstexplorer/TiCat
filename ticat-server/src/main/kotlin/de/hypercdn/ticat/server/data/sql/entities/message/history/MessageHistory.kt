@@ -1,11 +1,10 @@
-package de.hypercdn.ticat.server.data.sql.entities.messages.history
+package de.hypercdn.ticat.server.data.sql.entities.message.history
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.config.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.data.helper.CopyConstructable
-import de.hypercdn.ticat.server.data.sql.entities.messages.Message
-import de.hypercdn.ticat.server.data.sql.entities.page.Page
+import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import de.hypercdn.ticat.server.data.sql.entities.page.history.PageHistory
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*

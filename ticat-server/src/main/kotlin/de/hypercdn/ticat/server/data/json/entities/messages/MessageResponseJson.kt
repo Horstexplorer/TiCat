@@ -1,14 +1,12 @@
 package de.hypercdn.ticat.server.data.json.entities.messages
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJson
-import de.hypercdn.ticat.server.data.json.entities.page.history.PageHistoryResponseJson
 import de.hypercdn.ticat.server.data.json.entities.ticket.TicketResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.workspace.WorkspaceResponseJson
-import de.hypercdn.ticat.server.data.sql.entities.messages.Message
+import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import java.time.OffsetDateTime
 import java.util.*
 
