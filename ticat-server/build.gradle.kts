@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.2.1"
+	id("org.springframework.boot") version "3.2.2"
 	id("io.spring.dependency-management") version "1.1.4"
 	kotlin("jvm") version "2.0.0-Beta2"
-	kotlin("plugin.spring") version "2.0.0-Beta2"
-	kotlin("plugin.jpa") version "2.0.0-Beta2"
+	kotlin("plugin.spring") version "2.0.0-Beta3"
+	kotlin("plugin.jpa") version "2.0.0-Beta3"
 }
 
 group = "de.hypercdn.ticat"
@@ -43,9 +43,11 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
 	implementation("com.fasterxml.jackson.core:jackson-core:2.16.1")
 	implementation("com.fasterxml.jackson.core:jackson-annotations:2.16.1")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.google.guava:guava:33.0.0-jre")
-	implementation("org.springframework.vault:spring-vault-core:3.1.0")
+	implementation("org.springframework.vault:spring-vault-core:3.1.1")
 
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -73,7 +75,7 @@ java {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "21"
+		jvmTarget = java.targetCompatibility.majorVersion
 	}
 }
 

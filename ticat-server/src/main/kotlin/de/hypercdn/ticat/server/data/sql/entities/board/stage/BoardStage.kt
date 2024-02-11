@@ -2,13 +2,12 @@ package de.hypercdn.ticat.server.data.sql.entities.board.stage
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.config.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
+import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.data.helper.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
 import jakarta.persistence.Table
-import lombok.extern.slf4j.Slf4j
 import org.hibernate.annotations.*
 import java.time.OffsetDateTime
 import java.util.*

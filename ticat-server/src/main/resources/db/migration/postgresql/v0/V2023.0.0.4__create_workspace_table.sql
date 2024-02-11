@@ -21,6 +21,7 @@ CREATE TABLE workspaces
     setting_visibility  WORKSPACE_VISIBILITY  NOT NULL DEFAULT 'MEMBERS_ONLY',
     setting_access_mode WORKSPACE_ACCESS_MODE NOT NULL DEFAULT 'INVITE_ONLY',
     setting_status      WORKSPACE_STATUS      NOT NULL DEFAULT 'ACTIVE',
+    setting_locale      VARCHAR(5)                     DEFAULT NULL,
 
     title               VARCHAR(32)                    DEFAULT NULL,
     description         TEXT                           DEFAULT NULL,
@@ -78,7 +79,10 @@ $$
 DECLARE
     maxID int := 0;
 BEGIN
-    SELECT MAX(version_id) + 1 INTO maxID FROM workspace_history WHERE workspace_history.workspace_uuid = NEW.workspace_uuid;
+    SELECT MAX(version_id) + 1
+    INTO maxID
+    FROM workspace_history
+    WHERE workspace_history.workspace_uuid = NEW.workspace_uuid;
     IF maxID IS NULL THEN
         NEW.version_id := 1;
     ELSE

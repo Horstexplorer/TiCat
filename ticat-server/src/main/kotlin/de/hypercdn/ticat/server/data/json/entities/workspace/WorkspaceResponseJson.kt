@@ -54,6 +54,10 @@ class WorkspaceResponseJson {
         @JsonInclude(JsonInclude.Include.NON_NULL)
         var status: Workspace.Settings.Status? = null
 
+        @JsonProperty(value = "setting_locale", required = false)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var locale: Locale? = null
+
     }
 
     @JsonProperty(value = "title", required = false)

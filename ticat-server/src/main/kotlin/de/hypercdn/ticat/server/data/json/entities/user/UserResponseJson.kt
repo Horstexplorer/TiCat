@@ -89,6 +89,10 @@ class UserResponseJson {
         @JsonInclude(JsonInclude.Include.NON_NULL)
         var status: User.Settings.Status? = null
 
+        @JsonProperty(value = "setting_locale", required = false)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var locale: Locale? = null
+
     }
 
 }

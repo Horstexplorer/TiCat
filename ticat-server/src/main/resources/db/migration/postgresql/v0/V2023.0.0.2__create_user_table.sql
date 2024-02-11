@@ -32,6 +32,7 @@ CREATE TABLE users
     setting_receive_workspace_invitations_from_origin USER_SETTING_WORKSPACE_INVITATION_ORIGIN NOT NULL DEFAULT 'ANYONE',
     setting_receive_messages_from_origin              USER_SETTING_MESSAGE_ORIGIN              NOT NULL DEFAULT 'WORKSPACE_MEMBER',
     setting_status                                    USER_SETTING_STATUS                      NOT NULL DEFAULT 'ACTIVE',
+    setting_locale                                    VARCHAR(5)                                        DEFAULT NULL,
 
     PRIMARY KEY (user_uuid),
     CONSTRAINT unique_auth_subject_reference
@@ -39,8 +40,11 @@ CREATE TABLE users
 );
 
 -- adds placeholder users
-INSERT INTO users (user_uuid, display_name, account_type, setting_receive_workspace_invitations_from_origin, setting_receive_messages_from_origin, setting_status)
-VALUES ('00000000-0000-4000-0000-000000000000', 'System', 'SYSTEM', 'NOBODY', 'NOBODY', 'DISABLED'), -- placeholder for system user
-       ('00000000-0000-4000-0000-000000000002', 'Guest', 'SYSTEM', 'NOBODY', 'NOBODY', 'ACTIVE'); -- placeholder for anonymous auth, may be enabled when required
+INSERT INTO users (user_uuid, display_name, account_type, setting_receive_workspace_invitations_from_origin,
+                   setting_receive_messages_from_origin, setting_status)
+VALUES ('00000000-0000-4000-0000-000000000000', 'System', 'SYSTEM', 'NOBODY', 'NOBODY',
+        'DISABLED'), -- placeholder for system user
+       ('00000000-0000-4000-0000-000000000002', 'Guest', 'SYSTEM', 'NOBODY', 'NOBODY',
+        'ACTIVE'); -- placeholder for anonymous auth, may be enabled when required
 
 COMMIT;

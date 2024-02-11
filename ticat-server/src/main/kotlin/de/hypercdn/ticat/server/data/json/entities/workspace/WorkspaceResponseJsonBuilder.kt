@@ -40,6 +40,7 @@ class WorkspaceResponseJsonBuilder(
             visibility = workspace?.settings?.visibility
             accessMode = workspace?.settings?.accessMode
             status = workspace?.settings?.status
+            locale = workspace?.settings?.locale
         }
     }
 

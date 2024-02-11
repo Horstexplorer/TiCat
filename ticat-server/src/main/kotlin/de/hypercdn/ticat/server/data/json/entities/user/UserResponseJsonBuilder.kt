@@ -87,6 +87,7 @@ class UserResponseJsonBuilder(
             receiveWorkspaceInvitationsFromOrigin = user?.settings?.receiveWorkspaceInvitationsFromOrigin
             receiveMessagesFromOrigin = user?.settings?.receiveMessagesFromOrigin
             status = user?.settings?.status
+            locale = user?.settings?.locale
         }
     }
 

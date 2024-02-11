@@ -2,13 +2,14 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.config.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
+import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.data.helper.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
 import java.time.OffsetDateTime
+import java.util.Locale
 import java.util.UUID
 
 @Entity
@@ -136,12 +137,19 @@ class Workspace : CopyConstructable<Workspace> {
             DELETED
         }
 
+        @Column(
+            name = "setting_locale"
+        )
+        @ColumnDefault("NULL")
+        var locale: Locale? = null
+
         constructor()
 
         constructor(other: Settings) {
             this.visibility = other.visibility
             this.accessMode = other.accessMode
             this.status = other.status
+            this.locale = other.locale
         }
 
     }

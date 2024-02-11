@@ -1,7 +1,7 @@
 package de.hypercdn.ticat.server.data.sql.entities.user
 
 import com.fasterxml.jackson.annotation.JsonFilter
-import de.hypercdn.ticat.server.config.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
+import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.data.helper.CopyConstructable
 import jakarta.persistence.*
 import jakarta.persistence.Table
@@ -194,12 +194,19 @@ class User : CopyConstructable<User> {
             DISABLED
         }
 
+        @Column(
+            name = "setting_locale"
+        )
+        @ColumnDefault("NULL")
+        var locale: Locale? = null
+
         constructor()
 
         constructor(other: Settings) {
             this.receiveWorkspaceInvitationsFromOrigin = other.receiveWorkspaceInvitationsFromOrigin
             this.receiveMessagesFromOrigin = other.receiveMessagesFromOrigin
             this.status = other.status
+            this.locale = other.locale
         }
 
     }
