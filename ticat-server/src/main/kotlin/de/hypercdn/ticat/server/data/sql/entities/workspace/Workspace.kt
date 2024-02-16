@@ -155,16 +155,18 @@ class Workspace : CopyConstructable<Workspace> {
     }
 
     @Column(
-        name = "title"
+        name = "title",
+        nullable = false
     )
-    @ColumnDefault("NULL")
-    var title: String? = null
+    @ColumnDefault("")
+    var title: String = ""
 
     @Column(
-        name = "description"
+        name = "description",
+        nullable = false
     )
-    @ColumnDefault("NULL")
-    var description: String? = null
+    @ColumnDefault("")
+    var description: String = ""
 
     constructor()
 

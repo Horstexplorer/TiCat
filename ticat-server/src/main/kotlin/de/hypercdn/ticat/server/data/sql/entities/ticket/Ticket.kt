@@ -168,16 +168,18 @@ class Ticket {
     }
 
     @Column(
-        name = "title"
+        name = "title",
+        nullable = false
     )
-    @ColumnDefault("NULL")
-    var title: String? = null
+    @ColumnDefault("")
+    var title: String = ""
 
     @Column(
-        name = "content"
+        name = "content",
+        nullable = false
     )
-    @ColumnDefault("NULL")
-    var content: String? = null
+    @ColumnDefault("")
+    var content: String = ""
 
     constructor()
 

@@ -23,8 +23,8 @@ CREATE TABLE workspaces
     setting_status      WORKSPACE_STATUS      NOT NULL DEFAULT 'ACTIVE',
     setting_locale      VARCHAR(5)                     DEFAULT NULL,
 
-    title               VARCHAR(32)                    DEFAULT NULL,
-    description         TEXT                           DEFAULT NULL,
+    title               VARCHAR(32)           NOT NULL DEFAULT '',
+    description         TEXT                  NOT NULL DEFAULT '',
 
     PRIMARY KEY (workspace_uuid),
     CONSTRAINT unique_human_id

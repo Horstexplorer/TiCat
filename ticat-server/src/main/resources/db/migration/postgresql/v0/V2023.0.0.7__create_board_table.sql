@@ -13,7 +13,7 @@ CREATE TABLE boards
     creator_uuid   UUID         NOT NULL,
     editor_uuid    UUID                  DEFAULT NULL,
 
-    title          VARCHAR(64)           DEFAULT NULL,
+    title          VARCHAR(64)  NOT NULL DEFAULT ''+,
     setting_status BOARD_STATUS NOT NULL DEFAULT 'ACTIVE',
 
     PRIMARY KEY (board_uuid),

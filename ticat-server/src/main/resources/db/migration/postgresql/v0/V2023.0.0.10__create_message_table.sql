@@ -17,7 +17,7 @@ CREATE TABLE messages
     recipient_user_uuid      UUID                   DEFAULT NULL,
 
     parent_message_uuid      UUID                   DEFAULT NULL,
-    content                  TEXT                   DEFAULT NULL,
+    content                  TEXT          NOT NULL DEFAULT '',
 
     setting_status           MESSAGE_STATUS NOT NULL DEFAULT 'ACTIVE',
 

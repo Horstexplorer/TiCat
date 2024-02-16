@@ -13,8 +13,8 @@ CREATE TABLE pages
     creator_uuid             UUID        NOT NULL,
     editor_uuid              UUID                 DEFAULT NULL,
 
-    title                    VARCHAR(64)          DEFAULT NULL,
-    content                  TEXT                 DEFAULT NULL,
+    title                    VARCHAR(64) NOT NULL DEFAULT '',
+    content                  TEXT        NOT NULL DEFAULT '',
 
     setting_status           PAGE_STATUS NOT NULL DEFAULT 'ACTIVE',
     setting_parent_page_uuid UUID                 DEFAULT NULL,

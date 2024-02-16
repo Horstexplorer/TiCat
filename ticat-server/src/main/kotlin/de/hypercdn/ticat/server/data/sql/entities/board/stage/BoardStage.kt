@@ -135,10 +135,11 @@ class BoardStage : CopyConstructable<BoardStage> {
     }
 
     @Column(
-        name = "title"
+        name = "title",
+        nullable = false
     )
-    @ColumnDefault("NULL")
-    var title: String? = null
+    @ColumnDefault("")
+    var title: String = ""
 
     constructor()
 

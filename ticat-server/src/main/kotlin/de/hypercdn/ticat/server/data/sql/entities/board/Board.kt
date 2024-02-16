@@ -97,10 +97,11 @@ class Board : CopyConstructable<Board> {
     var editor: User? = null
 
     @Column(
-        name = "title"
+        name = "title",
+        nullable = false
     )
-    @ColumnDefault("NULL")
-    var title: String? = null
+    @ColumnDefault("")
+    var title: String = ""
 
     @Embedded
     var settings: Settings = Settings()

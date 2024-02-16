@@ -165,9 +165,9 @@ class Message : CopyConstructable<Message> {
 
     @Column(
         name = "content",
-        updatable = false
+        nullable = false
     )
-    var content: String? = null
+    var content: String = ""
 
     @Embedded
     var settings: Settings = Settings()

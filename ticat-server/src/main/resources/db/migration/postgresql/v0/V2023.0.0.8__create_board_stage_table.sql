@@ -13,7 +13,7 @@ CREATE TABLE board_stages
     creator_uuid        UUID               NOT NULL,
     editor_uuid         UUID                        DEFAULT NULL,
 
-    title               VARCHAR(64)                 DEFAULT NULL,
+    title               VARCHAR(64)        NOT NULL DEFAULT '',
     setting_index_value INTEGER            NOT NULL DEFAULT 0,
     setting_status      BOARD_STAGE_STATUS NOT NULL DEFAULT 'ACTIVE',
 
