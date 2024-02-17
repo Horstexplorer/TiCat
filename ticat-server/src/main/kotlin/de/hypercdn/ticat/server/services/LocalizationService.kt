@@ -5,9 +5,11 @@ import de.hypercdn.ticat.server.config.getMessage
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.helper.ExtendedReloadableResourceBundleMessageSource
-import org.springframework.context.MessageSource
+import mu.two.KLogger
+import mu.two.KotlinLogging
+import org.springframework.context.NoSuchMessageException
 import org.springframework.stereotype.Component
-import java.util.Locale
+import java.util.*
 
 @Component
 class LocalizationService(
@@ -15,24 +17,41 @@ class LocalizationService(
     val messageSource: ExtendedReloadableResourceBundleMessageSource
 ) {
 
+    private val logger: KLogger = KotlinLogging.logger{}
+
     fun localeFromEntityContext(user: User): Locale = localeFromEntityContext(null, user)
 
     fun localeFromEntityContext(workspace: Workspace): Locale = localeFromEntityContext(workspace, null)
 
     fun localeFromEntityContext(workspace: Workspace? = null, user: User? = null): Locale {
-        if (workspace != null && workspace.settings.locale != null && localizationConfig.allowWorkspaceSpecificLocalizationOverride)
-            return workspace.settings.locale!!
-        if (user != null && user.settings.locale != null && localizationConfig.allowUserSpecificLocalization)
-            return user.settings.locale!!
-        return localizationConfig.defaultLanguage
+        val workspaceLocale = workspace?.settings?.locale
+        val userLocale = user?.settings?.locale
+        val defaultLocale = localizationConfig.defaultLanguage
+        if (workspace != null && workspaceLocale != null && isValidLocale(workspaceLocale) && localizationConfig.allowWorkspaceSpecificLocalizationOverride) {
+            logger.debug{"Resolving locale from entity context using workspace locale $workspaceLocale"}
+            return workspaceLocale
+        }
+        if (user != null && userLocale != null && isValidLocale(userLocale) && localizationConfig.allowUserSpecificLocalization) {
+            logger.debug{"Resolving locale from entity context using user locale $userLocale"}
+            return userLocale
+        }
+        logger.debug{"Resolving locale from entity context using fallback locale $defaultLocale"}
+        return defaultLocale
     }
 
     fun isValidLocale(locale: Locale): Boolean {
-        return messageSource.containsLanguageFor(locale)
+        val result = messageSource.containsLanguageFor(locale);
+        logger.debug{"Validating locale $locale: $result"}
+        return result
     }
 
     fun resolve(key: String, locale: Locale): String {
-        return messageSource.getMessage(key, locale)
+        logger.debug{"Resolving $key with locale $locale"}
+        val message = try { messageSource.getMessage(key, locale) }
+            catch (_: NoSuchMessageException) { key }
+        if (message == key)
+            logger.error{"Failed to resolve $key for locale $locale"}
+        return message
     }
 
 }

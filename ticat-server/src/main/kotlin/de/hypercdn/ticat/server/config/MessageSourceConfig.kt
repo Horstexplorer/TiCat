@@ -24,7 +24,6 @@ class MessageSourceConfig {
         setPropertiesPersister(YamlPropertiesLoader())
         setDefaultEncoding("UTF-8")
         setUseCodeAsDefaultMessage(true)
-        setDefaultLocale(null)
         setFallbackToSystemLocale(false)
     }
 
