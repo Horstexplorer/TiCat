@@ -1,5 +1,6 @@
 package de.hypercdn.ticat.server.helper
 
+import de.hypercdn.ticat.server.config.LocalizationConfig
 import de.hypercdn.ticat.server.config.MessageKeys
 import de.hypercdn.ticat.server.config.getMessage
 import jakarta.annotation.PostConstruct
@@ -10,7 +11,9 @@ import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ExtendedReloadableResourceBundleMessageSource : ReloadableResourceBundleMessageSource() {
+class ExtendedReloadableResourceBundleMessageSource(
+    val localizationConfig: LocalizationConfig
+) : ReloadableResourceBundleMessageSource() {
 
     private lateinit var validLocales: Set<Locale>
     private lateinit var languageLocals: List<Locale>
@@ -27,8 +30,16 @@ class ExtendedReloadableResourceBundleMessageSource : ReloadableResourceBundleMe
         }
         languageLocals = foundLocales.filter { it.language == it.toLanguageTag() }.toSet().toList()
         validLocales = foundLocales.toSet()
-        log.info{"Identified message sources for ${languageLocals.size} languages (${validLocales.size} valid locales)."}
+        log.info{"Identified message sources for ${languageLocals.size} languages: ${languageLocals.joinToString()} (${validLocales.size} valid locales)."}
         clearCacheIncludingAncestors()
+        if (!containsLanguageFor(localizationConfig.defaultLanguage)) {
+            throw IllegalArgumentException("Configured default language ${localizationConfig.defaultLanguage} has not been found after loading localization filed.")
+        }
+        defaultLocale = localizationConfig.defaultLanguage
+    }
+
+    fun containsLanguageFor(locale: Locale): Boolean {
+        return languageLocals.any { it.language == locale.language } || validLocales.contains(locale)
     }
 
     fun getProperties(locale: Locale): Properties? {

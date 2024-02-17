@@ -13,6 +13,7 @@ class YamlPropertiesLoader : PropertiesPersister {
     override fun load(props: Properties, inputStream: InputStream) {
         val yaml = ObjectMapper(YAMLFactory()).readValue(inputStream, Map::class.java)
         val flatYaml = JsonMapFlattener.flattenToStringMap(yaml as Map<String, Any?>)
+        flatYaml.entries.removeIf { it.value == null }
         props.putAll(flatYaml)
     }
 

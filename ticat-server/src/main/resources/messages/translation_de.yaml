@@ -1,5 +1,5 @@
 details:
   language: Deutsch
   enabled: true
-server: ""
-frontend: ""
+server:
+frontend:
