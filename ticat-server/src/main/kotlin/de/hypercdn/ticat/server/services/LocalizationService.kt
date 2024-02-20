@@ -5,6 +5,7 @@ import de.hypercdn.ticat.server.config.getMessage
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.helper.ExtendedReloadableResourceBundleMessageSource
+import de.hypercdn.ticat.server.helper.asLanguageLocale
 import mu.two.KLogger
 import mu.two.KotlinLogging
 import org.springframework.context.NoSuchMessageException
@@ -40,17 +41,19 @@ class LocalizationService(
     }
 
     fun isValidLocale(locale: Locale): Boolean {
-        val result = messageSource.containsLanguageFor(locale);
-        logger.debug{"Validating locale $locale: $result"}
+        val language = locale.asLanguageLocale()
+        val result = messageSource.containsLanguageFor(language)
+        logger.debug{"Validating locale $locale as $language: $result"}
         return result
     }
 
     fun resolve(key: String, locale: Locale): String {
-        logger.debug{"Resolving $key with locale $locale"}
+        val language = locale.asLanguageLocale()
+        logger.debug{"Resolving $key with locale $locale as $language"}
         val message = try { messageSource.getMessage(key, locale) }
             catch (_: NoSuchMessageException) { key }
         if (message == key)
-            logger.error{"Failed to resolve $key for locale $locale"}
+            logger.error{"Failed to resolve $key for locale $locale as $language"}
         return message
     }
 
