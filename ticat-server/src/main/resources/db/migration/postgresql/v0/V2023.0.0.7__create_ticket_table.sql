@@ -78,7 +78,7 @@ EXECUTE PROCEDURE TICKET_ID_INCREMENT_FNT();
 
 CREATE TABLE ticket_history
 (
-    ticket_history_uuid          UUID      NOT NULL,
+    ticket_history_uuid          UUID      NOT NULL DEFAULT gen_random_uuid(),
     ticket_uuid                  UUID      NOT NULL,
     created_at                   TIMESTAMP NOT NULL DEFAULT NOW(),
     version_id                   INTEGER   NOT NULL DEFAULT -1,
@@ -133,5 +133,49 @@ CREATE TRIGGER TICKET_HISTORY_VERSION_ID_INCREMENT
     FOR EACH ROW
 EXECUTE PROCEDURE TICKET_HISTORY_VERSION_ID_INCREMENT_FNT();
 
+CREATE TYPE AUDIT_TICKET_ACTION AS ENUM ('CREATED_TICKET', 'MODIFIED_TICKET_CONTENT', 'MODIFIED_TICKET_SETTINGS', 'ARCHIVED_TICKET', 'UNARCHIVED_TICKET', 'DELETED_TICKET', 'REVERTED_FROM_HISTORY');
+
+-- audit log for ticket related modifications
+CREATE TABLE audit_ticket
+(
+    audit_uuid           UUID                NOT NULL DEFAULT gen_random_uuid(),
+    created_at           TIMESTAMP           NOT NULL DEFAULT NOW(),
+
+    action               AUDIT_TICKET_ACTION NOT NULL,
+    action_description   TEXT                         DEFAULT NULL,
+
+    actor_entity_uuid    UUID                         DEFAULT NULL,
+    actor_entity_hint    TEXT                         DEFAULT NULL,
+
+    affected_entity_uuid UUID                         DEFAULT NULL,
+    affected_entity_hint TEXT                         DEFAULT NULL,
+
+    parent_entity_uuid   UUID                         DEFAULT NULL,
+    parent_entity_hint   TEXT                         DEFAULT NULL,
+
+    change_history_uuid  UUID                         DEFAULT NULL,
+
+    PRIMARY KEY (audit_uuid),
+    CONSTRAINT actor_entity_fk
+        FOREIGN KEY (actor_entity_uuid)
+            REFERENCES users (user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT affected_entity_fk
+        FOREIGN KEY (affected_entity_uuid)
+            REFERENCES boards (board_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT parent_entity_fk
+        FOREIGN KEY (parent_entity_uuid)
+            REFERENCES workspaces (workspace_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT change_history_fk
+        FOREIGN KEY (change_history_uuid)
+            REFERENCES ticket_history (ticket_history_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE
+);
 
 COMMIT;

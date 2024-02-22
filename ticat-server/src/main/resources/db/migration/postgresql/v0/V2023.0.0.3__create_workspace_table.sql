@@ -98,4 +98,41 @@ CREATE TRIGGER WORKSPACE_VERSION_ID_INCREMENT
     FOR EACH ROW
 EXECUTE PROCEDURE WORKSPACE_VERSION_ID_INCREMENT_FNT();
 
+CREATE TYPE AUDIT_WORKSPACE_ACTION AS ENUM ('CREATED_WORKSPACE', 'MODIFIED_WORKSPACE', 'ARCHIVED_WORKSPACE', 'UNARCHIVED_WORKSPACE', 'DELETED_WORKSPACE', 'REVERTED_FROM_HISTORY');
+
+-- audit log for workspace related modifications
+CREATE TABLE audit_workspaces
+(
+    audit_uuid           UUID                   NOT NULL DEFAULT gen_random_uuid(),
+    created_at           TIMESTAMP              NOT NULL DEFAULT NOW(),
+
+    action               AUDIT_WORKSPACE_ACTION NOT NULL,
+    action_description   TEXT                            DEFAULT NULL,
+
+    actor_entity_uuid    UUID                            DEFAULT NULL,
+    actor_entity_hint    TEXT                            DEFAULT NULL,
+
+    affected_entity_uuid UUID                            DEFAULT NULL,
+    affected_entity_hint TEXT                            DEFAULT NULL,
+
+    change_history_uuid  UUID                            DEFAULT NULL,
+
+    PRIMARY KEY (audit_uuid),
+    CONSTRAINT actor_entity_fk
+        FOREIGN KEY (actor_entity_uuid)
+            REFERENCES users (user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT affected_entity_fk
+        FOREIGN KEY (affected_entity_uuid)
+            REFERENCES workspaces (workspace_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT change_history_fk
+        FOREIGN KEY (change_history_uuid)
+            REFERENCES workspace_history (workspace_history_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE
+);
+
 COMMIT;

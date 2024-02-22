@@ -39,4 +39,44 @@ CREATE TABLE workspace_members
             ON UPDATE CASCADE
 );
 
+CREATE TYPE AUDIT_WORKSPACE_MEMBER_ACTION AS ENUM ('MEMBERSHIP_REQUESTED', 'MEMBERSHIP_OFFERED', 'MEMBERSHIP_GRANTED', 'MEMBERSHIP_DENIED', 'MODIFIED_PERMISSIONS');
+
+-- audit log for workspace member related modifications
+CREATE TABLE audit_workspace_members
+(
+    audit_uuid                     UUID                          NOT NULL DEFAULT gen_random_uuid(),
+    created_at                     TIMESTAMP                     NOT NULL DEFAULT NOW(),
+
+    action                         AUDIT_WORKSPACE_MEMBER_ACTION NOT NULL,
+    action_description             TEXT                                   DEFAULT NULL,
+
+    actor_entity_uuid              UUID                                   DEFAULT NULL,
+    actor_entity_hint              TEXT                                   DEFAULT NULL,
+
+    affected_entity_workspace_uuid UUID                                   DEFAULT NULL,
+    affected_entity_user_uuid      UUID                                   DEFAULT NULL,
+    affected_entity_workspace_hint TEXT                                   DEFAULT NULL,
+    affected_entity_user_hint      TEXT                                   DEFAULT NULL,
+
+    parent_entity_uuid             UUID                                   DEFAULT NULL,
+    parent_entity_hint             TEXT                                   DEFAULT NULL,
+
+    PRIMARY KEY (audit_uuid),
+    CONSTRAINT actor_entity_fk
+        FOREIGN KEY (actor_entity_uuid)
+            REFERENCES users (user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT affected_entity_fk
+        FOREIGN KEY (affected_entity_workspace_uuid, affected_entity_user_uuid)
+            REFERENCES workspace_members(workspace_uuid, user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT parent_entity_fk
+        FOREIGN KEY (parent_entity_uuid)
+            REFERENCES workspaces (workspace_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE
+);
+
 COMMIT;

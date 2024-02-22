@@ -47,4 +47,53 @@ VALUES ('00000000-0000-4000-0000-000000000000', 'System', 'SYSTEM', 'NOBODY', 'N
        ('00000000-0000-4000-0000-000000000002', 'Guest', 'SYSTEM', 'NOBODY', 'NOBODY',
         'ACTIVE'); -- placeholder for anonymous auth, may be enabled when required
 
+-- Representing a known jwt entity to reduce updates of the user entity
+CREATE TABLE user_auth_cache
+(
+    auth_subject_reference TEXT      NOT NULL,
+    auth_identifier        TEXT      NOT NULL,
+
+    created_at             TIMESTAMP NOT NULL DEFAULT NOW(),
+    predicted_expiry       TIMESTAMP NOT NULL,
+
+    PRIMARY KEY (auth_subject_reference, auth_identifier),
+    CONSTRAINT user_fk
+        FOREIGN KEY (auth_subject_reference)
+            REFERENCES users (auth_subject_reference)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+);
+
+
+CREATE TYPE AUDIT_USER_ACTION AS ENUM ('UPDATED_USER_DETAILS', 'MODIFIED_SETTINGS', 'MODIFIED_PERMISSIONS');
+
+-- audit log for user entity related modifications
+CREATE TABLE audit_users
+(
+    audit_uuid           UUID              NOT NULL DEFAULT gen_random_uuid(),
+    created_at           TIMESTAMP         NOT NULL DEFAULT NOW(),
+
+    action               AUDIT_USER_ACTION NOT NULL,
+    action_description   TEXT                       DEFAULT NULL,
+
+    actor_entity_uuid    UUID                       DEFAULT NULL,
+    actor_entity_hint    TEXT                       DEFAULT NULL,
+
+    affected_entity_uuid UUID                       DEFAULT NULL,
+    affected_entity_hint TEXT                       DEFAULT NULL,
+
+    PRIMARY KEY (audit_uuid),
+    CONSTRAINT actor_entity_fk
+        FOREIGN KEY (actor_entity_uuid)
+            REFERENCES users (user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT affected_entity_fk
+        FOREIGN KEY (affected_entity_uuid)
+            REFERENCES users (user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE
+);
+
+
 COMMIT;

@@ -99,4 +99,50 @@ CREATE TRIGGER PAGE_HISTORY_VERSION_ID_INCREMENT
     FOR EACH ROW
 EXECUTE PROCEDURE PAGE_HISTORY_VERSION_ID_INCREMENT_FNT();
 
+
+CREATE TYPE AUDIT_PAGE_ACTION AS ENUM ('CREATED_PAGE', 'MODIFIED_PAGE', 'ARCHIVED_PAGE', 'UNARCHIVED_PAGE', 'DELETED_PAGE', 'REVERTED_FROM_HISTORY');
+
+-- audit log for page related modifications
+CREATE TABLE audit_pages
+(
+    audit_uuid           UUID              NOT NULL DEFAULT gen_random_uuid(),
+    created_at           TIMESTAMP         NOT NULL DEFAULT NOW(),
+
+    action               AUDIT_PAGE_ACTION NOT NULL,
+    action_description   TEXT                       DEFAULT NULL,
+
+    actor_entity_uuid    UUID                       DEFAULT NULL,
+    actor_entity_hint    TEXT                       DEFAULT NULL,
+
+    affected_entity_uuid UUID                       DEFAULT NULL,
+    affected_entity_hint TEXT                       DEFAULT NULL,
+
+    parent_entity_uuid   UUID                       DEFAULT NULL,
+    parent_entity_hint   TEXT                       DEFAULT NULL,
+
+    change_history_uuid  UUID                       DEFAULT NULL,
+
+    PRIMARY KEY (audit_uuid),
+    CONSTRAINT actor_entity_fk
+        FOREIGN KEY (actor_entity_uuid)
+            REFERENCES users (user_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT affected_entity_fk
+        FOREIGN KEY (affected_entity_uuid)
+            REFERENCES pages (page_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT parent_entity_fk
+        FOREIGN KEY (parent_entity_uuid)
+            REFERENCES workspaces (workspace_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT change_history_fk
+        FOREIGN KEY (change_history_uuid)
+            REFERENCES page_history (page_history_uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE
+);
+
 COMMIT;
