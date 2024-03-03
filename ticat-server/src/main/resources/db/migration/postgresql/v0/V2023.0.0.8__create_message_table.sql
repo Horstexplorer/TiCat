@@ -56,17 +56,17 @@ CREATE TABLE messages
 
 CREATE TABLE message_history
 (
-    message_history_uuid UUID      NOT NULL DEFAULT gen_random_uuid(),
-    message_uuid         UUID      NOT NULL,
-    created_at           TIMESTAMP NOT NULL DEFAULT NOW(),
-    version_id           INTEGER   NOT NULL DEFAULT -1,
-    editor_uuid          UUID      NOT NULL,
-    old_content          TEXT               DEFAULT NULL,
-    old_setting_status   MESSAGE_STATUS     DEFAULT NULL,
+    history_uuid          UUID      NOT NULL DEFAULT gen_random_uuid(),
+    entity_reference_uuid UUID      NOT NULL,
+    created_at            TIMESTAMP NOT NULL DEFAULT NOW(),
+    version_id            INTEGER   NOT NULL DEFAULT -1,
+    editor_uuid           UUID      NOT NULL,
+    old_content           TEXT               DEFAULT NULL,
+    old_setting_status    MESSAGE_STATUS     DEFAULT NULL,
 
-    PRIMARY KEY (message_history_uuid),
+    PRIMARY KEY (history_uuid),
     CONSTRAINT message_fk
-        FOREIGN KEY (message_uuid)
+        FOREIGN KEY (entity_reference_uuid)
             REFERENCES messages (message_uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
@@ -86,7 +86,7 @@ $$
 DECLARE
     maxID int := 0;
 BEGIN
-    SELECT MAX(version_id) + 1 INTO maxID FROM message_history WHERE message_history.message_uuid = NEW.message_uuid;
+    SELECT MAX(version_id) + 1 INTO maxID FROM message_history WHERE message_history.entity_reference_uuid = NEW.entity_reference_uuid;
     IF maxID IS NULL THEN
         NEW.version_id := 1;
     ELSE

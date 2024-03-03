@@ -42,8 +42,8 @@ CREATE TABLE workspaces
 
 CREATE TABLE workspace_history
 (
-    workspace_history_uuid  UUID      NOT NULL    DEFAULT gen_random_uuid(),
-    workspace_uuid          UUID      NOT NULL,
+    history_uuid            UUID      NOT NULL    DEFAULT gen_random_uuid(),
+    entity_reference_uuid   UUID      NOT NULL,
     version_id              INTEGER   NOT NULL    DEFAULT -1,
 
     created_at              TIMESTAMP NOT NULL    DEFAULT NOW(),
@@ -55,11 +55,11 @@ CREATE TABLE workspace_history
     old_setting_access_mode WORKSPACE_ACCESS_MODE DEFAULT NULL,
     old_setting_status      WORKSPACE_STATUS      DEFAULT NULL,
 
-    PRIMARY KEY (workspace_history_uuid),
+    PRIMARY KEY (history_uuid),
     CONSTRAINT unique_version_id
-        UNIQUE (workspace_uuid, version_id),
+        UNIQUE (entity_reference_uuid, version_id),
     CONSTRAINT workspace_fk
-        FOREIGN KEY (workspace_uuid)
+        FOREIGN KEY (entity_reference_uuid)
             REFERENCES workspaces (workspace_uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
@@ -82,7 +82,7 @@ BEGIN
     SELECT MAX(version_id) + 1
     INTO maxID
     FROM workspace_history
-    WHERE workspace_history.workspace_uuid = NEW.workspace_uuid;
+    WHERE workspace_history.entity_reference_uuid = NEW.entity_reference_uuid;
     IF maxID IS NULL THEN
         NEW.version_id := 1;
     ELSE

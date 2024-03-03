@@ -44,8 +44,8 @@ CREATE TABLE pages
 
 CREATE TABLE page_history
 (
-    page_history_uuid            UUID      NOT NULL DEFAULT gen_random_uuid(),
-    page_uuid                    UUID      NOT NULL,
+    history_uuid                 UUID      NOT NULL DEFAULT gen_random_uuid(),
+    entity_reference_uuid        UUID      NOT NULL,
     version_id                   INTEGER   NOT NULL DEFAULT -1,
 
     created_at                   TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -56,9 +56,9 @@ CREATE TABLE page_history
     old_setting_status           PAGE_STATUS        DEFAULT NULL,
     old_setting_parent_page_uuid UUID               DEFAULT NULL,
 
-    PRIMARY KEY (page_history_uuid),
+    PRIMARY KEY (history_uuid),
     CONSTRAINT page_fk
-        FOREIGN KEY (page_uuid)
+        FOREIGN KEY (entity_reference_uuid)
             REFERENCES pages (page_uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
@@ -83,7 +83,7 @@ $$
 DECLARE
     maxID int := 0;
 BEGIN
-    SELECT MAX(version_id) + 1 INTO maxID FROM page_history WHERE page_history.version_id = NEW.version_id;
+    SELECT MAX(version_id) + 1 INTO maxID FROM page_history WHERE page_history.entity_reference_uuid = NEW.entity_reference_uuid;
     IF maxID IS NULL THEN
         NEW.version_id := 1;
     ELSE

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.data.sql.entities.history.History
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
@@ -19,69 +20,19 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class PageHistory : CopyConstructable<PageHistory> {
+class PageHistory : History<PageHistory>, CopyConstructable<PageHistory> {
 
     companion object
 
-    @Id
-    @Column(
-        name = "page_history_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
-
-    @Column(
-        name = "page_uuid",
-        nullable = false,
-        updatable = false
-    )
-    lateinit var pageUUID: UUID
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "page_uuid",
+        name = "entity_reference_uuid",
         referencedColumnName = "page_uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     lateinit var page: Page
-
-    @Column(
-        name = "version_id",
-        nullable = false,
-        updatable = false
-    )
-    var versionId: Int = -1
-
-    @Column(
-        name = "created_at",
-        nullable = false,
-        updatable = false
-    )
-    @ColumnDefault("NOW()")
-    @CreationTimestamp
-    lateinit var createdAt: OffsetDateTime
-
-
-    @Column(
-        name = "editor_uuid",
-        nullable = false,
-        updatable = false
-    )
-    lateinit var editorUUID: UUID
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "editor_uuid",
-        referencedColumnName = "user_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    lateinit var editor: User
 
     @Column(
         name = "old_title",
@@ -116,20 +67,10 @@ class PageHistory : CopyConstructable<PageHistory> {
 
     constructor()
 
-    constructor(other: PageHistory) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
-        if (other::pageUUID.isInitialized)
-            this.pageUUID = other.pageUUID
-        if (other::createdAt.isInitialized)
-            this.createdAt = other.createdAt
-        this.versionId = other.versionId
-        if (other::editorUUID.isInitialized)
-            this.editorUUID = other.editorUUID
+    constructor(other: PageHistory): super(other){
         this.oldTitle = other.oldTitle
         this.oldContent = other.oldContent
         this.oldSettingStatus = other.oldSettingStatus
     }
-
 
 }

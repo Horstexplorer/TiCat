@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.data.sql.entities.history.History
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
@@ -20,69 +21,19 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class WorkspaceHistory : CopyConstructable<WorkspaceHistory> {
+class WorkspaceHistory : History<WorkspaceHistory>, CopyConstructable<WorkspaceHistory> {
 
     companion object
 
-    @Id
-    @Column(
-        name = "workspace_history_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
-
-    @Column(
-        name = "workspace_uuid",
-        nullable = false,
-        updatable = false
-    )
-    lateinit var workspaceUUID: UUID
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "workspace_uuid",
+        name = "entity_reference_uuid",
         referencedColumnName = "workspace_uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     lateinit var workspace: Workspace
-
-
-    @Column(
-        name = "version_id",
-        nullable = false,
-        updatable = false
-    )
-    var versionId: Int = -1
-
-    @Column(
-        name = "created_at",
-        nullable = false,
-        updatable = false
-    )
-    @ColumnDefault("NOW()")
-    @CreationTimestamp
-    lateinit var createdAt: OffsetDateTime
-
-    @Column(
-        name = "editor_uuid",
-        nullable = false,
-        updatable = false
-    )
-    lateinit var editorUUID: UUID
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "editor_uuid",
-        referencedColumnName = "user_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    lateinit var editor: User
 
     @Column(
         name = "old_title",
@@ -124,16 +75,7 @@ class WorkspaceHistory : CopyConstructable<WorkspaceHistory> {
 
     constructor()
 
-    constructor(other: WorkspaceHistory) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
-        if (other::workspaceUUID.isInitialized)
-            this.workspaceUUID = other.workspaceUUID
-        if (other::createdAt.isInitialized)
-            this.createdAt = other.createdAt
-        this.versionId = other.versionId
-        if (other::editorUUID.isInitialized)
-            this.editorUUID = other.editorUUID
+    constructor(other: WorkspaceHistory): super(other) {
         this.oldTitle = other.oldTitle
         this.oldDescription = other.oldDescription
         this.oldVisibility = other.oldVisibility

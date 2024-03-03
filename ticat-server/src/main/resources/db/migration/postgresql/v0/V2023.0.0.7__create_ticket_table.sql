@@ -78,9 +78,10 @@ EXECUTE PROCEDURE TICKET_ID_INCREMENT_FNT();
 
 CREATE TABLE ticket_history
 (
-    ticket_history_uuid          UUID      NOT NULL DEFAULT gen_random_uuid(),
-    ticket_uuid                  UUID      NOT NULL,
+    history_uuid                 UUID      NOT NULL DEFAULT gen_random_uuid(),
+    entity_reference_uuid        UUID      NOT NULL,
     created_at                   TIMESTAMP NOT NULL DEFAULT NOW(),
+
     version_id                   INTEGER   NOT NULL DEFAULT -1,
     editor_uuid                  UUID      NOT NULL,
 
@@ -90,9 +91,9 @@ CREATE TABLE ticket_history
     old_setting_board_stage_uuid UUID               DEFAULT NULL,
     old_setting_assignee_uuid    UUID               DEFAULT NULL,
 
-    PRIMARY KEY (ticket_history_uuid),
+    PRIMARY KEY (history_uuid),
     CONSTRAINT ticket_fk
-        FOREIGN KEY (ticket_uuid)
+        FOREIGN KEY (entity_reference_uuid)
             REFERENCES tickets (ticket_uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
@@ -117,7 +118,7 @@ $$
 DECLARE
     maxID int := 0;
 BEGIN
-    SELECT MAX(version_id) + 1 INTO maxID FROM ticket_history WHERE ticket_history.ticket_uuid = NEW.ticket_uuid;
+    SELECT MAX(version_id) + 1 INTO maxID FROM ticket_history WHERE ticket_history.entity_reference_uuid = NEW.entity_reference_uuid;
     IF maxID IS NULL THEN
         NEW.version_id := 1;
     ELSE
