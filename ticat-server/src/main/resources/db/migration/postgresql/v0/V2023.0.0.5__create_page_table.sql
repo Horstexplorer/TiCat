@@ -140,7 +140,7 @@ CREATE TABLE audit_pages
             ON UPDATE CASCADE,
     CONSTRAINT change_history_fk
         FOREIGN KEY (change_history_uuid)
-            REFERENCES page_history (page_history_uuid)
+            REFERENCES page_history (history_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

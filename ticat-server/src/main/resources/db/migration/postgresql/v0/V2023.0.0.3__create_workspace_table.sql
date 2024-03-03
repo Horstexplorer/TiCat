@@ -130,7 +130,7 @@ CREATE TABLE audit_workspaces
             ON UPDATE CASCADE,
     CONSTRAINT change_history_fk
         FOREIGN KEY (change_history_uuid)
-            REFERENCES workspace_history (workspace_history_uuid)
+            REFERENCES workspace_history (history_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

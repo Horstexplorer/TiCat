@@ -10,7 +10,7 @@ import java.time.OffsetDateTime
 import java.util.*
 
 @MappedSuperclass
-open class History<T>: CopyConstructable<T> where T: History<T>, T: CopyConstructable<T> {
+open class History<T> : CopyConstructable<T> where T : History<T>, T : CopyConstructable<T> {
 
     companion object
 

@@ -169,12 +169,12 @@ CREATE TABLE audit_ticket
             ON UPDATE CASCADE,
     CONSTRAINT parent_entity_fk
         FOREIGN KEY (parent_entity_uuid)
-            REFERENCES workspaces (workspace_uuid)
+            REFERENCES boards (board_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT change_history_fk
         FOREIGN KEY (change_history_uuid)
-            REFERENCES ticket_history (ticket_history_uuid)
+            REFERENCES ticket_history (history_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

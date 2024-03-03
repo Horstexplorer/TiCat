@@ -58,9 +58,6 @@ CREATE TABLE audit_workspace_members
     affected_entity_workspace_hint TEXT                                   DEFAULT NULL,
     affected_entity_user_hint      TEXT                                   DEFAULT NULL,
 
-    parent_entity_uuid             UUID                                   DEFAULT NULL,
-    parent_entity_hint             TEXT                                   DEFAULT NULL,
-
     PRIMARY KEY (audit_uuid),
     CONSTRAINT actor_entity_fk
         FOREIGN KEY (actor_entity_uuid)
@@ -70,11 +67,6 @@ CREATE TABLE audit_workspace_members
     CONSTRAINT affected_entity_fk
         FOREIGN KEY (affected_entity_workspace_uuid, affected_entity_user_uuid)
             REFERENCES workspace_members(workspace_uuid, user_uuid)
-            ON DELETE SET DEFAULT
-            ON UPDATE CASCADE,
-    CONSTRAINT parent_entity_fk
-        FOREIGN KEY (parent_entity_uuid)
-            REFERENCES workspaces (workspace_uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );
