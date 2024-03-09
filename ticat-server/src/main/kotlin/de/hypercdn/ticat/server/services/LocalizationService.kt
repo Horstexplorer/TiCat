@@ -4,8 +4,8 @@ import de.hypercdn.ticat.server.config.LocalizationConfig
 import de.hypercdn.ticat.server.config.getMessage
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
-import de.hypercdn.ticat.server.helper.ExtendedReloadableResourceBundleMessageSource
-import de.hypercdn.ticat.server.helper.asLanguageLocale
+import de.hypercdn.ticat.server.helper.locale.ExtendedReloadableResourceBundleMessageSource
+import de.hypercdn.ticat.server.helper.locale.asLanguageLocale
 import mu.two.KLogger
 import mu.two.KotlinLogging
 import org.springframework.context.NoSuchMessageException

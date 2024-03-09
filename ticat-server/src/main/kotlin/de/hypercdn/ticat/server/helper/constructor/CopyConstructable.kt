@@ -1,9 +1,9 @@
-package de.hypercdn.ticat.server.data.helper
+package de.hypercdn.ticat.server.helper.constructor
 
 import java.io.InvalidClassException
 import kotlin.reflect.full.createType
 
-interface CopyConstructable<T : CopyConstructable<T>> {
+interface CopyConstructable<T> where T : CopyConstructable<T> {
     fun copy(): T {
         val constructor = this::class.constructors
             .firstOrNull() { c ->

@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.page.history
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.page.builder
@@ -15,7 +15,7 @@ class PageHistoryResponseJsonBuilder(
         it.uuid = pageHistory?.uuid
     }
 
-    fun includePage(skip: Boolean = false, page: Page? = pageHistory?.page, configurator: (PageResponseJsonBuilder) -> Unit): PageHistoryResponseJsonBuilder = modify(skip) {
+    fun includePage(skip: Boolean = false, page: Page? = pageHistory?.entity, configurator: (PageResponseJsonBuilder) -> Unit): PageHistoryResponseJsonBuilder = modify(skip) {
         it.page = PageResponseJson.builder(page)
             .apply(configurator)
             .build()

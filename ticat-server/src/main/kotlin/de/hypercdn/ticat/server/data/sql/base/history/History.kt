@@ -1,8 +1,9 @@
-package de.hypercdn.ticat.server.data.sql.entities.history
+package de.hypercdn.ticat.server.data.sql.base.history
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.data.sql.entities.user.User
+import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.CreationTimestamp
@@ -10,18 +11,9 @@ import java.time.OffsetDateTime
 import java.util.*
 
 @MappedSuperclass
-open class History<T> : CopyConstructable<T> where T : History<T>, T : CopyConstructable<T> {
+open class History<E, T> : BaseEntity<T> where E : BaseEntity<E>, T : History<E, T> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "history_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "entity_reference_uuid",
@@ -29,6 +21,16 @@ open class History<T> : CopyConstructable<T> where T : History<T>, T : CopyConst
         updatable = false
     )
     lateinit var entityReferenceUUID: UUID
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "entity_reference_uuid",
+        referencedColumnName = "uuid",
+        insertable = false,
+        updatable = false
+    )
+    @JsonIgnore
+    lateinit var entity: E
 
     @Column(
         name = "created_at",
@@ -57,18 +59,16 @@ open class History<T> : CopyConstructable<T> where T : History<T>, T : CopyConst
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "editor_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     lateinit var editor: User
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: T) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: T): super(other) {
         if (other::entityReferenceUUID.isInitialized)
             this.entityReferenceUUID = other.entityReferenceUUID
         if (other::createdAt.isInitialized)

@@ -13,6 +13,7 @@ CREATE TYPE WORKSPACE_MEMBER_WORKSPACE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', '
 -- Representing a user within the context of a workspace
 CREATE TABLE workspace_members
 (
+    uuid                 UUID                                  NOT NULL DEFAULT gen_random_uuid(),
     workspace_uuid       UUID                                  NOT NULL,
     user_uuid            UUID                                  NOT NULL,
 
@@ -26,15 +27,17 @@ CREATE TABLE workspace_members
     permission_tickets   WORKSPACE_MEMBER_TICKET_PERMISSION    NOT NULL DEFAULT 'CAN_VIEW',
     permission_workspace WORKSPACE_MEMBER_WORKSPACE_PERMISSION NOT NULL DEFAULT 'CAN_VIEW',
 
-    PRIMARY KEY (workspace_uuid, user_uuid),
+    PRIMARY KEY (uuid),
+    CONSTRAINT unique_user_workspace_combination
+        UNIQUE (workspace_uuid, user_uuid),
     CONSTRAINT user_fk
         FOREIGN KEY (user_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT workspace_fk
         FOREIGN KEY (workspace_uuid)
-            REFERENCES workspaces (workspace_uuid)
+            REFERENCES workspaces (uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
@@ -44,29 +47,35 @@ CREATE TYPE AUDIT_WORKSPACE_MEMBER_ACTION AS ENUM ('MEMBERSHIP_REQUESTED', 'MEMB
 -- audit log for workspace member related modifications
 CREATE TABLE audit_workspace_members
 (
-    audit_uuid                     UUID                          NOT NULL DEFAULT gen_random_uuid(),
-    created_at                     TIMESTAMP                     NOT NULL DEFAULT NOW(),
+    uuid                 UUID                          NOT NULL DEFAULT gen_random_uuid(),
+    created_at           TIMESTAMP                     NOT NULL DEFAULT NOW(),
 
-    action                         AUDIT_WORKSPACE_MEMBER_ACTION NOT NULL,
-    action_description             TEXT                                   DEFAULT NULL,
+    action               AUDIT_WORKSPACE_MEMBER_ACTION NOT NULL,
+    action_description   TEXT                                   DEFAULT NULL,
 
-    actor_entity_uuid              UUID                                   DEFAULT NULL,
-    actor_entity_hint              TEXT                                   DEFAULT NULL,
+    actor_entity_uuid    UUID                                   DEFAULT NULL,
+    actor_entity_hint    TEXT                                   DEFAULT NULL,
 
-    affected_entity_workspace_uuid UUID                                   DEFAULT NULL,
-    affected_entity_user_uuid      UUID                                   DEFAULT NULL,
-    affected_entity_workspace_hint TEXT                                   DEFAULT NULL,
-    affected_entity_user_hint      TEXT                                   DEFAULT NULL,
+    affected_entity_uuid UUID                                   DEFAULT NULL,
+    affected_entity_hint TEXT                                   DEFAULT NULL,
 
-    PRIMARY KEY (audit_uuid),
+    parent_entity_uuid   UUID                                   DEFAULT NULL,
+    parent_entity_hint   TEXT                                   DEFAULT NULL,
+
+    PRIMARY KEY (uuid),
     CONSTRAINT actor_entity_fk
         FOREIGN KEY (actor_entity_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT affected_entity_fk
-        FOREIGN KEY (affected_entity_workspace_uuid, affected_entity_user_uuid)
-            REFERENCES workspace_members(workspace_uuid, user_uuid)
+        FOREIGN KEY (affected_entity_uuid)
+            REFERENCES workspace_members (uuid)
+            ON DELETE SET DEFAULT
+            ON UPDATE CASCADE,
+    CONSTRAINT parent_entity_fk
+        FOREIGN KEY (parent_entity_uuid)
+            REFERENCES workspaces (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

@@ -2,7 +2,8 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace.member.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.entities.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.ParentedAudit
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.data.sql.entities.workspace.member.WorkspaceMember
@@ -18,52 +19,18 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class WorkspaceMemberAudit : Audit<WorkspaceMemberAudit, WorkspaceMemberAuditAction>() {
+class WorkspaceMemberAudit : ParentedAudit<WorkspaceMember, WorkspaceMemberAudit, WorkspaceMemberAudit.AuditAction> {
 
-    @Column(
-        name = "affected_entity_workspace_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityWorkspaceUUID: UUID? = null
+    enum class AuditAction {
+        MEMBERSHIP_REQUESTED,
+        MEMBERSHIP_OFFERED,
+        MEMBERSHIP_GRANTED,
+        MEMBERSHIP_DENIED,
+        MODIFIED_PERMISSIONS
+    }
 
-    @Column(
-        name = "affected_entity_user_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUserUUID: UUID? = null
+    constructor(): super()
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns(
-        JoinColumn(
-            name = "affected_entity_workspace_uuid",
-            referencedColumnName = "workspace_uuid",
-            insertable = false,
-            updatable = false
-        ),
-        JoinColumn(
-            name = "affected_entity_user_uuid",
-            referencedColumnName = "user_uuid",
-            insertable = false,
-            updatable = false
-        )
-    )
-    @JsonIgnore
-    var affectedEntity: WorkspaceMember? = null
-
-    @Column(
-        name = "affected_entity_workspace_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityWorkspaceHint: String? = null
-
-    @Column(
-        name = "affected_entity_user_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUserHint: String? = null
+    constructor(other: WorkspaceMemberAudit): super(other)
 
 }

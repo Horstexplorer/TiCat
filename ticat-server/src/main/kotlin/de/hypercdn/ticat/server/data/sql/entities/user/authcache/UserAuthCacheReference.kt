@@ -2,8 +2,9 @@ package de.hypercdn.ticat.server.data.sql.entities.user.authcache
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
 import lombok.NoArgsConstructor
@@ -15,23 +16,15 @@ import java.io.Serializable
 import java.time.OffsetDateTime
 
 @Entity
-@IdClass(UserAuthCacheReference.Key::class)
 @Table(name = "user_auth_cache")
 @DynamicInsert
 @DynamicUpdate
 @Cacheable(true)
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class UserAuthCacheReference : CopyConstructable<User>  {
+class UserAuthCacheReference : BaseEntity<UserAuthCacheReference> {
 
     companion object
 
-    @NoArgsConstructor
-    class Key(
-        var authSubjectReference: String,
-        var authIdentifier: String
-    ) : Serializable
-
-    @Id
     @Column(
         name = "auth_subject_reference",
         nullable = false,
@@ -39,7 +32,6 @@ class UserAuthCacheReference : CopyConstructable<User>  {
     )
     lateinit var authSubjectReference: String
 
-    @PrimaryKeyJoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "auth_subject_reference",
@@ -50,7 +42,6 @@ class UserAuthCacheReference : CopyConstructable<User>  {
     @JsonIgnore
     lateinit var user: User
 
-    @Id
     @Column(
         name = "auth_identifier",
         nullable = false,
@@ -74,9 +65,9 @@ class UserAuthCacheReference : CopyConstructable<User>  {
     )
     lateinit var predictedExpiry: OffsetDateTime
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: UserAuthCacheReference) {
+    constructor(other: UserAuthCacheReference): super(other) {
         if (other::authSubjectReference.isInitialized)
             this.authSubjectReference = other.authSubjectReference
         if (other::authIdentifier.isInitialized)

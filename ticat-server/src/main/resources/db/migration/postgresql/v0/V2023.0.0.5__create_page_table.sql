@@ -4,7 +4,7 @@ CREATE TYPE PAGE_STATUS AS ENUM ('ACTIVE', 'ARCHIVED', 'DELETED');
 
 CREATE TABLE pages
 (
-    page_uuid                UUID        NOT NULL DEFAULT gen_random_uuid(),
+    uuid                     UUID        NOT NULL DEFAULT gen_random_uuid(),
     workspace_uuid           UUID        NOT NULL,
 
     created_at               TIMESTAMP   NOT NULL DEFAULT NOW(),
@@ -19,32 +19,32 @@ CREATE TABLE pages
     setting_status           PAGE_STATUS NOT NULL DEFAULT 'ACTIVE',
     setting_parent_page_uuid UUID                 DEFAULT NULL,
 
-    PRIMARY KEY (page_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT workspace_fk
         FOREIGN KEY (workspace_uuid)
-            REFERENCES workspaces (workspace_uuid)
+            REFERENCES workspaces (uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT creator_fk
         FOREIGN KEY (creator_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT editor_fk
         FOREIGN KEY (editor_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT parent_page_fk
         FOREIGN KEY (setting_parent_page_uuid)
-            REFERENCES pages (page_uuid)
+            REFERENCES pages (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );
 
 CREATE TABLE page_history
 (
-    history_uuid                 UUID      NOT NULL DEFAULT gen_random_uuid(),
+    uuid                         UUID      NOT NULL DEFAULT gen_random_uuid(),
     entity_reference_uuid        UUID      NOT NULL,
     version_id                   INTEGER   NOT NULL DEFAULT -1,
 
@@ -56,20 +56,20 @@ CREATE TABLE page_history
     old_setting_status           PAGE_STATUS        DEFAULT NULL,
     old_setting_parent_page_uuid UUID               DEFAULT NULL,
 
-    PRIMARY KEY (history_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT page_fk
         FOREIGN KEY (entity_reference_uuid)
-            REFERENCES pages (page_uuid)
+            REFERENCES pages (uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT editor_fk
         FOREIGN KEY (editor_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT old_parent_page_fk
         FOREIGN KEY (old_setting_parent_page_uuid)
-            REFERENCES pages (page_uuid)
+            REFERENCES pages (uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
@@ -105,7 +105,7 @@ CREATE TYPE AUDIT_PAGE_ACTION AS ENUM ('CREATED_PAGE', 'MODIFIED_PAGE', 'ARCHIVE
 -- audit log for page related modifications
 CREATE TABLE audit_pages
 (
-    audit_uuid           UUID              NOT NULL DEFAULT gen_random_uuid(),
+    uuid                 UUID              NOT NULL DEFAULT gen_random_uuid(),
     created_at           TIMESTAMP         NOT NULL DEFAULT NOW(),
 
     action               AUDIT_PAGE_ACTION NOT NULL,
@@ -122,25 +122,25 @@ CREATE TABLE audit_pages
 
     change_history_uuid  UUID                       DEFAULT NULL,
 
-    PRIMARY KEY (audit_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT actor_entity_fk
         FOREIGN KEY (actor_entity_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT affected_entity_fk
         FOREIGN KEY (affected_entity_uuid)
-            REFERENCES pages (page_uuid)
+            REFERENCES pages (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT parent_entity_fk
         FOREIGN KEY (parent_entity_uuid)
-            REFERENCES workspaces (workspace_uuid)
+            REFERENCES workspaces (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT change_history_fk
         FOREIGN KEY (change_history_uuid)
-            REFERENCES page_history (history_uuid)
+            REFERENCES page_history (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

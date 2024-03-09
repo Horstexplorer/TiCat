@@ -1,13 +1,11 @@
 package de.hypercdn.ticat.server.config
 
-import de.hypercdn.ticat.server.helper.ExtendedReloadableResourceBundleMessageSource
-import de.hypercdn.ticat.server.helper.YamlPropertiesLoader
-import jakarta.annotation.PostConstruct
+import de.hypercdn.ticat.server.helper.locale.ExtendedReloadableResourceBundleMessageSource
+import de.hypercdn.ticat.server.helper.locale.YamlPropertiesLoader
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
 import java.util.*
 
 

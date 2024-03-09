@@ -2,7 +2,7 @@ package de.hypercdn.ticat.server.data.sql.entities.message.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.entities.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.Audit
 import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import de.hypercdn.ticat.server.data.sql.entities.message.history.MessageHistory
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
@@ -19,31 +19,15 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class MessageAudit : Audit<MessageAudit, MessageAuditAction>() {
+class MessageAudit : Audit<Message, MessageAudit, MessageAudit.AuditAction> {
 
-    @Column(
-        name = "affected_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUUID: UUID? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "affected_entity_uuid",
-        referencedColumnName = "message_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var affectedEntity: Message? = null
-
-    @Column(
-        name = "affected_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityHint: String? = null
+    enum class AuditAction {
+        CREATED_MESSAGE,
+        MODIFIED_MESSAGE_CONTENT,
+        ARCHIVED_MESSAGE,
+        DELETED_MESSAGE,
+        REVERTED_FROM_HISTORY
+    }
 
     @Column(
         name = "change_history_uuid",
@@ -55,11 +39,17 @@ class MessageAudit : Audit<MessageAudit, MessageAuditAction>() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "change_history_uuid",
-        referencedColumnName = "history_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     var changeHistory: MessageHistory? = null
+
+    constructor(): super()
+
+    constructor(other: MessageAudit): super(other) {
+        this.changeHistoryUUID = other.changeHistoryUUID
+    }
 
 }

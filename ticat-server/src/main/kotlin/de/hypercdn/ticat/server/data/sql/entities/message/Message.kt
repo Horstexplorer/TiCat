@@ -2,8 +2,9 @@ package de.hypercdn.ticat.server.data.sql.entities.message
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import de.hypercdn.ticat.server.data.sql.entities.user.User
@@ -19,18 +20,9 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Message : CopyConstructable<Message> {
+class Message : BaseEntity<Message> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "message_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "created_at",
@@ -59,7 +51,7 @@ class Message : CopyConstructable<Message> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "sender_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -80,13 +72,14 @@ class Message : CopyConstructable<Message> {
         @ColumnDefault("NULL")
         var workspaceUUID: UUID? = null
 
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "recipient_workspace_uuid",
-            referencedColumnName = "workspace_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
-        @ManyToOne(fetch = FetchType.LAZY)
+        @JsonIgnore
         var workspace: Workspace? = null
 
         @Column(
@@ -98,7 +91,7 @@ class Message : CopyConstructable<Message> {
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "recipient_page_uuid",
-            referencedColumnName = "page_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
@@ -114,7 +107,7 @@ class Message : CopyConstructable<Message> {
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "recipient_ticket_uuid",
-            referencedColumnName = "ticket_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
@@ -130,10 +123,11 @@ class Message : CopyConstructable<Message> {
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "recipient_user_uuid",
-            referencedColumnName = "user_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
+        @JsonIgnore
         var user: User? = null
 
         constructor()
@@ -156,7 +150,7 @@ class Message : CopyConstructable<Message> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "parent_message_uuid",
-        referencedColumnName = "message_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -199,11 +193,9 @@ class Message : CopyConstructable<Message> {
 
     }
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: Message) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: Message): super(other) {
         if (other::createdAt.isInitialized)
             this.createdAt = other.createdAt
         if (other::modifiedAt.isInitialized)

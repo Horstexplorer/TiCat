@@ -4,7 +4,7 @@ CREATE TYPE TICKET_STATUS AS ENUM ('ACTIVE', 'ARCHIVED', 'DELETED');
 
 CREATE TABLE tickets
 (
-    ticket_uuid              UUID          NOT NULL DEFAULT gen_random_uuid(),
+    uuid                     UUID          NOT NULL DEFAULT gen_random_uuid(),
     board_uuid               UUID          NOT NULL,
     ticket_series_id         INTEGER       NOT NULL DEFAULT -1,
 
@@ -21,32 +21,32 @@ CREATE TABLE tickets
     setting_board_stage_uuid UUID                   DEFAULT NULL,
     setting_assignee_uuid    UUID                   DEFAULT NULL,
 
-    PRIMARY KEY (ticket_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT board_fk
         FOREIGN KEY (board_uuid)
-            REFERENCES boards (board_uuid)
+            REFERENCES boards (uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT board_stage_fk
         FOREIGN KEY (setting_board_stage_uuid)
-            REFERENCES board_stages (board_stage_uuid)
+            REFERENCES board_stages (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT ticket_series_id_unique
-        UNIQUE (board_uuid, ticket_series_id),
+        UNIQUE (board_uuid, uuid),
     CONSTRAINT creator_fk
         FOREIGN KEY (creator_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT editor_fk
         FOREIGN KEY (editor_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT assignee_fk
         FOREIGN KEY (setting_assignee_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE
 );
@@ -78,7 +78,7 @@ EXECUTE PROCEDURE TICKET_ID_INCREMENT_FNT();
 
 CREATE TABLE ticket_history
 (
-    history_uuid                 UUID      NOT NULL DEFAULT gen_random_uuid(),
+    uuid                         UUID      NOT NULL DEFAULT gen_random_uuid(),
     entity_reference_uuid        UUID      NOT NULL,
     created_at                   TIMESTAMP NOT NULL DEFAULT NOW(),
 
@@ -91,20 +91,20 @@ CREATE TABLE ticket_history
     old_setting_board_stage_uuid UUID               DEFAULT NULL,
     old_setting_assignee_uuid    UUID               DEFAULT NULL,
 
-    PRIMARY KEY (history_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT ticket_fk
         FOREIGN KEY (entity_reference_uuid)
-            REFERENCES tickets (ticket_uuid)
+            REFERENCES tickets (uuid)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT editor_fk
         FOREIGN KEY (editor_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE,
     CONSTRAINT assignee_fk
         FOREIGN KEY (old_setting_assignee_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE NO ACTION
             ON UPDATE CASCADE
 );
@@ -139,7 +139,7 @@ CREATE TYPE AUDIT_TICKET_ACTION AS ENUM ('CREATED_TICKET', 'MODIFIED_TICKET_CONT
 -- audit log for ticket related modifications
 CREATE TABLE audit_ticket
 (
-    audit_uuid           UUID                NOT NULL DEFAULT gen_random_uuid(),
+    uuid                 UUID                NOT NULL DEFAULT gen_random_uuid(),
     created_at           TIMESTAMP           NOT NULL DEFAULT NOW(),
 
     action               AUDIT_TICKET_ACTION NOT NULL,
@@ -156,25 +156,25 @@ CREATE TABLE audit_ticket
 
     change_history_uuid  UUID                         DEFAULT NULL,
 
-    PRIMARY KEY (audit_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT actor_entity_fk
         FOREIGN KEY (actor_entity_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT affected_entity_fk
         FOREIGN KEY (affected_entity_uuid)
-            REFERENCES boards (board_uuid)
+            REFERENCES boards (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT parent_entity_fk
         FOREIGN KEY (parent_entity_uuid)
-            REFERENCES boards (board_uuid)
+            REFERENCES boards (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT change_history_fk
         FOREIGN KEY (change_history_uuid)
-            REFERENCES ticket_history (history_uuid)
+            REFERENCES ticket_history (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

@@ -2,9 +2,9 @@ package de.hypercdn.ticat.server.data.sql.entities.page
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
-import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import jakarta.persistence.*
@@ -18,18 +18,9 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Page : CopyConstructable<Page> {
+class Page : BaseEntity<Page> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "page_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "workspace_uuid",
@@ -41,7 +32,7 @@ class Page : CopyConstructable<Page> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "workspace_uuid",
-        referencedColumnName = "workspace_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -75,7 +66,7 @@ class Page : CopyConstructable<Page> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "creator_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -90,7 +81,7 @@ class Page : CopyConstructable<Page> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "editor_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -141,7 +132,7 @@ class Page : CopyConstructable<Page> {
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "setting_parent_page_uuid",
-            referencedColumnName = "page_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
@@ -157,11 +148,9 @@ class Page : CopyConstructable<Page> {
 
     }
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: Page) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: Page): super(other) {
         if (other::workspaceUUID.isInitialized)
             this.workspaceUUID = other.workspaceUUID
         if (other::createdAt.isInitialized)

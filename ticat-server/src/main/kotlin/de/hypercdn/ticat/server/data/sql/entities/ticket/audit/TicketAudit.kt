@@ -2,7 +2,8 @@ package de.hypercdn.ticat.server.data.sql.entities.ticket.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.entities.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.ParentedAudit
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import de.hypercdn.ticat.server.data.sql.entities.ticket.history.TicketHistory
@@ -18,55 +19,17 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class TicketAudit : Audit<TicketAudit, TicketAuditAction>() {
+class TicketAudit : ParentedAudit<Ticket, TicketAudit, TicketAudit.AuditAction> {
 
-    @Column(
-        name = "affected_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUUID: UUID? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "affected_entity_uuid",
-        referencedColumnName = "ticket_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var affectedEntity: Ticket? = null
-
-    @Column(
-        name = "affected_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityHint: String? = null
-
-    @Column(
-        name = "parent_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var parentEntityUUID: UUID? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "parent_entity_uuid",
-        referencedColumnName = "board_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var parentEntity: Board? = null
-
-    @Column(
-        name = "parent_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var parentEntityHint: String? = null
+    enum class AuditAction {
+        CREATED_TICKET,
+        MODIFIED_TICKET_CONTENT,
+        MODIFIED_TICKET_SETTINGS,
+        ARCHIVED_TICKET,
+        UNARCHIVED_TICKET,
+        DELETED_TICKET,
+        REVERTED_FROM_HISTORY
+    }
 
     @Column(
         name = "change_history_uuid",
@@ -78,11 +41,17 @@ class TicketAudit : Audit<TicketAudit, TicketAuditAction>() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "change_history_uuid",
-        referencedColumnName = "history_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     var changeHistory: TicketHistory? = null
+
+    constructor(): super()
+
+    constructor(other: TicketAudit): super(other) {
+        this.changeHistoryUUID = other.changeHistoryUUID
+    }
 
 }

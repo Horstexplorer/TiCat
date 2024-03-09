@@ -12,7 +12,7 @@ CREATE TYPE USER_SETTING_STATUS AS ENUM ('ACTIVE', 'DISABLED');
 -- Used to store additional configurations and permissions away from the auth provider
 CREATE TABLE users
 (
-    user_uuid                                         UUID                                     NOT NULL DEFAULT gen_random_uuid(),
+    uuid                                              UUID                                     NOT NULL DEFAULT gen_random_uuid(),
     auth_subject_reference                            TEXT                                              DEFAULT NULL,
 
     created_at                                        TIMESTAMP                                NOT NULL DEFAULT NOW(),
@@ -34,13 +34,13 @@ CREATE TABLE users
     setting_status                                    USER_SETTING_STATUS                      NOT NULL DEFAULT 'ACTIVE',
     setting_locale                                    VARCHAR(5)                                        DEFAULT NULL,
 
-    PRIMARY KEY (user_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT unique_auth_subject_reference
         UNIQUE NULLS DISTINCT (auth_subject_reference)
 );
 
 -- adds placeholder users
-INSERT INTO users (user_uuid, display_name, account_type, setting_receive_workspace_invitations_from_origin,
+INSERT INTO users (uuid, display_name, account_type, setting_receive_workspace_invitations_from_origin,
                    setting_receive_messages_from_origin, setting_status)
 VALUES ('00000000-0000-4000-0000-000000000000', 'System', 'SYSTEM', 'NOBODY', 'NOBODY',
         'DISABLED'), -- placeholder for system user
@@ -50,13 +50,15 @@ VALUES ('00000000-0000-4000-0000-000000000000', 'System', 'SYSTEM', 'NOBODY', 'N
 -- Representing a known jwt entity to reduce updates of the user entity
 CREATE TABLE user_auth_cache
 (
+    uuid                   UUID      NOT NULL DEFAULT gen_random_uuid(),
+
     auth_subject_reference TEXT      NOT NULL,
     auth_identifier        TEXT      NOT NULL,
 
     created_at             TIMESTAMP NOT NULL DEFAULT NOW(),
     predicted_expiry       TIMESTAMP NOT NULL,
 
-    PRIMARY KEY (auth_subject_reference, auth_identifier),
+    PRIMARY KEY (uuid),
     CONSTRAINT user_fk
         FOREIGN KEY (auth_subject_reference)
             REFERENCES users (auth_subject_reference)
@@ -70,7 +72,7 @@ CREATE TYPE AUDIT_USER_ACTION AS ENUM ('UPDATED_USER_DETAILS', 'MODIFIED_SETTING
 -- audit log for user entity related modifications
 CREATE TABLE audit_users
 (
-    audit_uuid           UUID              NOT NULL DEFAULT gen_random_uuid(),
+    uuid                 UUID              NOT NULL DEFAULT gen_random_uuid(),
     created_at           TIMESTAMP         NOT NULL DEFAULT NOW(),
 
     action               AUDIT_USER_ACTION NOT NULL,
@@ -82,15 +84,15 @@ CREATE TABLE audit_users
     affected_entity_uuid UUID                       DEFAULT NULL,
     affected_entity_hint TEXT                       DEFAULT NULL,
 
-    PRIMARY KEY (audit_uuid),
+    PRIMARY KEY (uuid),
     CONSTRAINT actor_entity_fk
         FOREIGN KEY (actor_entity_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE,
     CONSTRAINT affected_entity_fk
         FOREIGN KEY (affected_entity_uuid)
-            REFERENCES users (user_uuid)
+            REFERENCES users (uuid)
             ON DELETE SET DEFAULT
             ON UPDATE CASCADE
 );

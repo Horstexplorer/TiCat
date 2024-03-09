@@ -2,8 +2,9 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
 import jakarta.persistence.Table
@@ -18,18 +19,9 @@ import java.util.UUID
 @DynamicUpdate
 @Cacheable(true)
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Workspace : CopyConstructable<Workspace> {
+class Workspace : BaseEntity<Workspace> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "workspace_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "human_id",
@@ -65,7 +57,7 @@ class Workspace : CopyConstructable<Workspace> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "creator_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -80,7 +72,7 @@ class Workspace : CopyConstructable<Workspace> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "editor_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -168,11 +160,9 @@ class Workspace : CopyConstructable<Workspace> {
     @ColumnDefault("")
     var description: String = ""
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: Workspace) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: Workspace): super(other) {
         if (other::humanId.isInitialized)
             this.humanId = other.humanId
         if (other::createdAt.isInitialized)

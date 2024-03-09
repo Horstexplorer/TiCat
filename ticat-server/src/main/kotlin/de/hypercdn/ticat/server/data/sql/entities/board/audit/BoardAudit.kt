@@ -2,10 +2,12 @@ package de.hypercdn.ticat.server.data.sql.entities.board.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.entities.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.ParentedAudit
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.DynamicInsert
@@ -17,54 +19,18 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class BoardAudit : Audit<BoardAudit, BoardAuditAction>() {
+class BoardAudit : ParentedAudit<Board, BoardAudit, BoardAudit.AuditAction> {
 
-    @Column(
-        name = "affected_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUUID: UUID? = null
+    enum class AuditAction {
+        CREATED_BOARD,
+        MODIFIED_BOARD,
+        ARCHIVED_BOARD,
+        UNARCHIVED_BOARD,
+        DELETED_BOARD
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "affected_entity_uuid",
-        referencedColumnName = "board_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var affectedEntity: Board? = null
+    constructor(): super()
 
-    @Column(
-        name = "affected_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityHint: String? = null
-
-    @Column(
-        name = "parent_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var parentEntityUUID: UUID? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "parent_entity_uuid",
-        referencedColumnName = "workspace_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var parentEntity: Workspace? = null
-
-    @Column(
-        name = "parent_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var parentEntityHint: String? = null
+    constructor(other: BoardAudit): super(other)
 
 }

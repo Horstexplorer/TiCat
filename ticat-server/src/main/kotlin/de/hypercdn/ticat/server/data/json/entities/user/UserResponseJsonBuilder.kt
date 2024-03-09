@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.user
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.user.effectivePermissions
 

@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.messages.history
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.messages.MessageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.messages.MessageResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.messages.builder
@@ -19,7 +19,7 @@ class MessageHistoryResponseJsonBuilder(
         it.uuid = messageHistory?.uuid
     }
 
-    fun includeMessage(skip: Boolean = false, message: Message? = messageHistory?.message, configurator: (MessageResponseJsonBuilder) -> Unit): MessageHistoryResponseJsonBuilder = modify(skip) {
+    fun includeMessage(skip: Boolean = false, message: Message? = messageHistory?.entity, configurator: (MessageResponseJsonBuilder) -> Unit): MessageHistoryResponseJsonBuilder = modify(skip) {
         it.message = MessageResponseJson.builder(message)
             .apply(configurator)
             .build()

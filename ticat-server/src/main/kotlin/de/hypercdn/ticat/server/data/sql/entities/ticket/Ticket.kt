@@ -2,10 +2,12 @@ package de.hypercdn.ticat.server.data.sql.entities.ticket
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
 import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
+import de.hypercdn.ticat.server.data.sql.entities.page.Page
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
 import jakarta.persistence.Table
@@ -18,18 +20,9 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Ticket {
+class Ticket : BaseEntity<Ticket> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "ticket_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "board_uuid",
@@ -41,7 +34,7 @@ class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "board_uuid",
-        referencedColumnName = "board_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -82,7 +75,7 @@ class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "creator_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -97,7 +90,7 @@ class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "editor_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -135,7 +128,7 @@ class Ticket {
         @OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "setting_board_stage_uuid",
-            referencedColumnName = "board_stage_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
@@ -150,7 +143,7 @@ class Ticket {
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(
             name = "setting_assignee_uuid",
-            referencedColumnName = "user_uuid",
+            referencedColumnName = "uuid",
             insertable = false,
             updatable = false
         )
@@ -181,11 +174,9 @@ class Ticket {
     @ColumnDefault("")
     var content: String = ""
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: Ticket) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: Ticket): super(other) {
         if (other::boardUUID.isInitialized)
             this.boardUUID = other.boardUUID
         this.seriesId = other.seriesId

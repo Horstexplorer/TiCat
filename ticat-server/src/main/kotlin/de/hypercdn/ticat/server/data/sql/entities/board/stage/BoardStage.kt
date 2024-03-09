@@ -2,8 +2,9 @@ package de.hypercdn.ticat.server.data.sql.entities.board.stage
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
@@ -17,18 +18,9 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class BoardStage : CopyConstructable<BoardStage> {
+class BoardStage : BaseEntity<BoardStage> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "board_stage_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "board_uuid",
@@ -40,7 +32,7 @@ class BoardStage : CopyConstructable<BoardStage> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "board_uuid",
-        referencedColumnName = "board_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -74,7 +66,7 @@ class BoardStage : CopyConstructable<BoardStage> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "creator_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -89,7 +81,7 @@ class BoardStage : CopyConstructable<BoardStage> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "editor_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -141,11 +133,9 @@ class BoardStage : CopyConstructable<BoardStage> {
     @ColumnDefault("")
     var title: String = ""
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: BoardStage) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: BoardStage): super(other) {
         if (other::boardUUID.isInitialized)
             this.boardUUID = other.boardUUID
         if (other::createdAt.isInitialized)

@@ -91,11 +91,9 @@ class UserManagementService(
     }
 
     private fun currentContextJwtIsAlreadyKnown(): Boolean {
-        return userAuthCacheRepository.existsById(
-            UserAuthCacheReference.Key(
-                currentContextJwtAuthenticationToken().token.id,
-                currentContextJwtAuthenticationToken().token.subject
-            )
+        return userAuthCacheRepository.existsByAuthSubjectReferenceAndAuthIdentifier(
+            currentContextJwtAuthenticationToken().token.subject,
+            currentContextJwtAuthenticationToken().token.id
         )
     }
 

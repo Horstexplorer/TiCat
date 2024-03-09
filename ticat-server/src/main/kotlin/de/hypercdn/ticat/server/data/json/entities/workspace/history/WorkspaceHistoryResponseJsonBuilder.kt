@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.workspace.history
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.builder
@@ -19,7 +19,7 @@ class WorkspaceHistoryResponseJsonBuilder(
         it.uuid = history?.uuid
     }
 
-    fun includeWorkspace(skip: Boolean = false, workspace: Workspace? = history?.workspace, configurator: (WorkspaceResponseJsonBuilder) -> Unit) : WorkspaceHistoryResponseJsonBuilder  = modify(skip) {
+    fun includeWorkspace(skip: Boolean = false, workspace: Workspace? = history?.entity, configurator: (WorkspaceResponseJsonBuilder) -> Unit) : WorkspaceHistoryResponseJsonBuilder  = modify(skip) {
         it.workspace = WorkspaceResponseJson.builder(workspace)
             .apply(configurator)
             .build()

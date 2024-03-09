@@ -2,9 +2,11 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace.member
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
+import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import jakarta.persistence.*
 import jakarta.persistence.Table
 import lombok.NoArgsConstructor
@@ -14,22 +16,14 @@ import java.time.OffsetDateTime
 import java.util.UUID
 
 @Entity
-@IdClass(WorkspaceMember.Key::class)
 @Table(name = "workspace_members")
 @DynamicInsert
 @DynamicUpdate
-@JsonFilter("omitUninitializedLateInitFields")
-class WorkspaceMember : CopyConstructable<WorkspaceMember> {
+@JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
+class WorkspaceMember : BaseEntity<WorkspaceMember> {
 
     companion object
 
-    @NoArgsConstructor
-    class Key(
-        var workspaceUUID: UUID,
-        var userUUID: UUID
-    ) : Serializable
-
-    @Id
     @Column(
         name = "workspace_uuid",
         nullable = false,
@@ -37,19 +31,16 @@ class WorkspaceMember : CopyConstructable<WorkspaceMember> {
     )
     lateinit var workspaceUUID: UUID
 
-    @PrimaryKeyJoinColumn
     @ManyToOne
     @JoinColumn(
         name = "workspace_uuid",
-        referencedColumnName = "workspace_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     lateinit var workspace: Workspace
 
-
-    @Id
     @Column(
         name = "user_uuid",
         nullable = false,
@@ -57,11 +48,10 @@ class WorkspaceMember : CopyConstructable<WorkspaceMember> {
     )
     lateinit var userUUID: UUID
 
-    @PrimaryKeyJoinColumn
     @ManyToOne
     @JoinColumn(
         name = "user_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -176,9 +166,9 @@ class WorkspaceMember : CopyConstructable<WorkspaceMember> {
 
     }
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: WorkspaceMember) {
+    constructor(other: WorkspaceMember): super(other) {
         if (other::userUUID.isInitialized)
             this.userUUID = other.userUUID
         if (other::workspaceUUID.isInitialized)

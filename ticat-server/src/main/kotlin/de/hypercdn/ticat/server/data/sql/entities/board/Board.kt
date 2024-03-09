@@ -2,7 +2,8 @@ package de.hypercdn.ticat.server.data.sql.entities.board
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
@@ -17,18 +18,9 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Board : CopyConstructable<Board> {
+class Board : BaseEntity<Board> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "board_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "workspace_uuid",
@@ -40,7 +32,7 @@ class Board : CopyConstructable<Board> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "workspace_uuid",
-        referencedColumnName = "workspace_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -74,7 +66,7 @@ class Board : CopyConstructable<Board> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "creator_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -89,7 +81,7 @@ class Board : CopyConstructable<Board> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "editor_uuid",
-        referencedColumnName = "user_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
@@ -133,11 +125,9 @@ class Board : CopyConstructable<Board> {
 
     }
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: Board) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: Board): super(other) {
         if (other::workspaceUUID.isInitialized)
             this.workspaceUUID = other.workspaceUUID
         if (other::createdAt.isInitialized)

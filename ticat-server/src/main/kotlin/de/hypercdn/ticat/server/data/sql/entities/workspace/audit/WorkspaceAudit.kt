@@ -2,7 +2,7 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.entities.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.Audit
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.data.sql.entities.workspace.history.WorkspaceHistory
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
@@ -17,31 +17,16 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class WorkspaceAudit : Audit<WorkspaceAudit, WorkspaceAuditAction>() {
+class WorkspaceAudit : Audit<Workspace, WorkspaceAudit, WorkspaceAudit.AuditAction> {
 
-    @Column(
-        name = "affected_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUUID: UUID? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "affected_entity_uuid",
-        referencedColumnName = "workspace_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var affectedEntity: Workspace? = null
-
-    @Column(
-        name = "affected_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityHint: String? = null
+    enum class AuditAction {
+        CREATED_WORKSPACE,
+        MODIFIED_WORKSPACE,
+        ARCHIVED_WORKSPACE,
+        UNARCHIVED_WORKSPACE,
+        DELETED_WORKSPACE,
+        REVERTED_FROM_HISTORY
+    }
 
 
     @Column(
@@ -54,11 +39,17 @@ class WorkspaceAudit : Audit<WorkspaceAudit, WorkspaceAuditAction>() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "change_history_uuid",
-        referencedColumnName = "history_uuid",
+        referencedColumnName = "uuid",
         insertable = false,
         updatable = false
     )
     @JsonIgnore
     var changeHistory: WorkspaceHistory? = null
+
+    constructor(): super()
+
+    constructor(other: WorkspaceAudit): super(other) {
+        this.changeHistoryUUID = other.changeHistoryUUID
+    }
 
 }

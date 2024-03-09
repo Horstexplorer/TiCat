@@ -1,15 +1,12 @@
 package de.hypercdn.ticat.server.data.json.entities.ticket.history
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
-import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJson
-import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJsonBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.ticket.TicketResponseJson
 import de.hypercdn.ticat.server.data.json.entities.ticket.TicketResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.ticket.builder
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.builder
-import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import de.hypercdn.ticat.server.data.sql.entities.ticket.history.TicketHistory
 import de.hypercdn.ticat.server.data.sql.entities.user.User
@@ -22,7 +19,7 @@ class TicketHistoryResponseJsonBuilder(
         it.uuid = ticketHistory?.uuid
     }
 
-    fun includeTicket(skip: Boolean = false, ticket: Ticket? = ticketHistory?.ticket, configurator: (TicketResponseJsonBuilder) -> Unit): TicketHistoryResponseJsonBuilder = modify(skip) {
+    fun includeTicket(skip: Boolean = false, ticket: Ticket? = ticketHistory?.entity, configurator: (TicketResponseJsonBuilder) -> Unit): TicketHistoryResponseJsonBuilder = modify(skip) {
         it.ticket = TicketResponseJson.builder(ticket)
             .apply(configurator)
             .build()

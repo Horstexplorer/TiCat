@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.board.stage
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.board.BoardResponseJson
 import de.hypercdn.ticat.server.data.json.entities.board.BoardResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.board.builder

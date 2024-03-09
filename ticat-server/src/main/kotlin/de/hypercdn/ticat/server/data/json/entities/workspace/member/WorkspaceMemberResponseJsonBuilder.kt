@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.workspace.member
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.builder

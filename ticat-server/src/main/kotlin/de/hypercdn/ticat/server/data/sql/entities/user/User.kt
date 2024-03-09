@@ -1,8 +1,9 @@
 package de.hypercdn.ticat.server.data.sql.entities.user
 
 import com.fasterxml.jackson.annotation.JsonFilter
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.data.helper.CopyConstructable
+import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import jakarta.persistence.*
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
@@ -15,18 +16,9 @@ import java.util.*
 @DynamicUpdate
 @Cacheable(true)
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class User : CopyConstructable<User> {
+class User : BaseEntity<User> {
 
     companion object
-
-    @Id
-    @Column(
-        name = "user_uuid",
-        nullable = false,
-        updatable = false
-    )
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    lateinit var uuid: UUID
 
     @Column(
         name = "auth_subject_reference",
@@ -211,11 +203,9 @@ class User : CopyConstructable<User> {
 
     }
 
-    constructor()
+    constructor(): super()
 
-    constructor(other: User) {
-        if (other::uuid.isInitialized)
-            this.uuid = other.uuid
+    constructor(other: User): super(other) {
         this.authSubjectReference = other.authSubjectReference
         if (other::createdAt.isInitialized)
             this.createdAt = other.createdAt

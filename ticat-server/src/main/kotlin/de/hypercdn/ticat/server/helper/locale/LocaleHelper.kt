@@ -1,4 +1,4 @@
-package de.hypercdn.ticat.server.helper
+package de.hypercdn.ticat.server.helper.locale
 
 import java.util.Locale
 

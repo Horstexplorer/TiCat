@@ -1,4 +1,4 @@
-package de.hypercdn.ticat.server.helper
+package de.hypercdn.ticat.server.helper.locale
 
 import de.hypercdn.ticat.server.config.LocalizationConfig
 import de.hypercdn.ticat.server.config.MessageKeys
@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct
 import mu.two.KLogger
 import mu.two.KotlinLogging
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
-import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 

@@ -1,6 +1,6 @@
 package de.hypercdn.ticat.server.data.json.entities.messages
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.page.builder

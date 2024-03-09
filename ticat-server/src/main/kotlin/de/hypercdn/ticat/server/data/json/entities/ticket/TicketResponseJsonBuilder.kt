@@ -1,17 +1,13 @@
 package de.hypercdn.ticat.server.data.json.entities.ticket
 
-import de.hypercdn.ticat.server.data.helper.EntityTemplateBuilder
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.json.entities.board.BoardResponseJson
 import de.hypercdn.ticat.server.data.json.entities.board.BoardResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.board.builder
-import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJson
-import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJsonBuilder
-import de.hypercdn.ticat.server.data.json.entities.board.stage.builder
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJsonBuilder
 import de.hypercdn.ticat.server.data.json.entities.user.builder
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
-import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 

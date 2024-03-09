@@ -2,7 +2,7 @@ package de.hypercdn.ticat.server.data.sql.entities.user.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.entities.audit.Audit
+import de.hypercdn.ticat.server.data.sql.base.audit.Audit
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import jakarta.persistence.*
@@ -16,30 +16,16 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class UserAudit : Audit<UserAudit, UserAuditAction>() {
+class UserAudit : Audit<User, UserAudit, UserAudit.AuditAction> {
 
-    @Column(
-        name = "affected_entity_uuid",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityUUID: UUID? = null
+    enum class AuditAction {
+        UPDATED_USER_DETAILS,
+        MODIFIED_SETTINGS,
+        MODIFIED_PERMISSIONS
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "affected_entity_uuid",
-        referencedColumnName = "user_uuid",
-        insertable = false,
-        updatable = false
-    )
-    @JsonIgnore
-    var affectedEntity: User? = null
+    constructor(): super()
 
-    @Column(
-        name = "affected_entity_hint",
-        updatable = false
-    )
-    @ColumnDefault("NULL")
-    var affectedEntityHint: String? = null
+    constructor(other: UserAudit): super(other)
 
 }
