@@ -3,9 +3,11 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.data.sql.base.history.HistoryAttachment
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
+import de.hypercdn.ticat.server.data.sql.entities.workspace.history.WorkspaceHistory
 import jakarta.persistence.*
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
@@ -19,7 +21,7 @@ import java.util.UUID
 @DynamicUpdate
 @Cacheable(true)
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Workspace : BaseEntity<Workspace> {
+class Workspace : BaseEntity<Workspace>, HistoryAttachment<WorkspaceHistory> {
 
     companion object
 

@@ -1,12 +1,15 @@
 package de.hypercdn.ticat.server.data.sql.base.audit
 
+import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault
 import java.util.*
 
 @MappedSuperclass
+@JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
 open class ParentedAudit<E, T, A> : Audit<E, T, A> where E : BaseEntity<E>, T : ParentedAudit<E, T, A>, A : Enum<A> {
 
     @Column(

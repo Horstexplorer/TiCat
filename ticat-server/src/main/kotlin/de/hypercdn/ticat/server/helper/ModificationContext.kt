@@ -7,8 +7,8 @@ import de.hypercdn.ticat.server.helper.difference.EntityDifference
 import java.util.function.BiFunction
 
 class ModificationContext<T>(
-    var original: T,
-    var snapshotCopies: ArrayList<T> = ArrayList()
+    private var original: T,
+    private var snapshotCopies: ArrayList<T> = ArrayList()
 ) where T : CopyConstructable<T> {
 
     private fun createSnapshot(entity: T): T {
@@ -17,9 +17,9 @@ class ModificationContext<T>(
         return copy
     }
 
-    fun lastSnapshot(): T {
-        return snapshotCopies.last()
-    }
+    fun lastSnapshot(): T = snapshotCopies.last()
+
+    fun original(): T = original
 
     fun modifyOriginal(consumer: (original: T) -> Unit): ModificationContext<T> {
         createSnapshot(original)
@@ -27,8 +27,12 @@ class ModificationContext<T>(
         return this
     }
 
-    fun modifyCopyOfOriginal(consumer: (copy: T) -> Unit): ModificationContext<T> {
-        val copy = createSnapshot(original)
+    fun modifyCopy(consumer: (copy: T) -> Unit): ModificationContext<T> {
+        val base = if (snapshotCopies.isNotEmpty())
+            snapshotCopies.last()
+        else
+            createSnapshot(original)
+        val copy = createSnapshot(base)
         consumer(copy)
         return this
     }
@@ -42,13 +46,14 @@ class ModificationContext<T>(
         return this
     }
 
-    fun getAbsoluteDifference(mappingLeft: BiFunction<T,T,T>, mappingRight: BiFunction<T,T,T>): EntityDifference<T> =
+    fun getAbsoluteDifference(mappingLeft: BiFunction<T,T,T> = BiFunction { l, _ -> l }, mappingRight: BiFunction<T,T,T> = BiFunction { _, r -> r }): EntityDifference<T> =
         Difference.between(mappingLeft.apply(original, lastSnapshot()), mappingRight.apply(original, lastSnapshot()))
 
-    fun getIncrementalDifference(mappingLeft: BiFunction<T,T,T>, mappingRight: BiFunction<T,T,T>): List<EntityDifference<T>> = ArrayList<T>().apply {
-        add(original)
-        addAll(snapshotCopies)
-    }
+    fun getIncrementalDifference(mappingLeft: BiFunction<T,T,T> = BiFunction { l, _ -> l }, mappingRight: BiFunction<T,T,T> = BiFunction { _, r -> r }): List<EntityDifference<T>> = ArrayList<T>()
+        .apply {
+            add(original)
+            addAll(snapshotCopies)
+        }
         .zipWithNext()
         .map {  Difference.between(mappingLeft.apply(it.first, it.second), mappingRight.apply(it.first, it.second)) }
 

@@ -6,7 +6,7 @@ import de.hypercdn.ticat.server.config.configuredObjectMapper
 
 interface Difference {
     companion object {
-        fun <T> between(first: T, second: T, objectMapper: ObjectMapper = configuredObjectMapper()): EntityDifference<T> where T : Any =
-            EntityDifference(first.javaClass, Maps.difference(objectMapper.convertValue(first, Map::class.java), objectMapper.convertValue(second, Map::class.java)))
+        fun <T> between(left: T, right: T, objectMapper: ObjectMapper = configuredObjectMapper()): EntityDifference<T> where T : Any =
+            EntityDifference(left.javaClass, left, right, Maps.difference(objectMapper.convertValue(left, Map::class.java), objectMapper.convertValue(right, Map::class.java)))
     }
 }
