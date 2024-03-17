@@ -2,8 +2,10 @@ package de.hypercdn.ticat.server.data.sql.entities.message
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.audit.AuditAttachment
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.data.sql.base.history.HistoryAttachment
+import de.hypercdn.ticat.server.data.sql.entities.message.audit.MessageAudit
 import de.hypercdn.ticat.server.data.sql.entities.message.history.MessageHistory
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
@@ -22,7 +24,7 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Message : BaseEntity<Message>, HistoryAttachment<MessageHistory> {
+class Message : BaseEntity<Message>, HistoryAttachment<MessageHistory>, AuditAttachment<MessageAudit> {
 
     companion object
 

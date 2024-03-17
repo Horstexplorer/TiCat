@@ -1,7 +1,9 @@
 package de.hypercdn.ticat.server.data.sql.entities.user
 
 import com.fasterxml.jackson.annotation.JsonFilter
+import de.hypercdn.ticat.server.data.sql.base.audit.AuditAttachment
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.data.sql.entities.user.audit.UserAudit
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import jakarta.persistence.*
@@ -16,7 +18,7 @@ import java.util.*
 @DynamicUpdate
 @Cacheable(true)
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class User : BaseEntity<User> {
+class User : BaseEntity<User>, AuditAttachment<UserAudit> {
 
     companion object
 

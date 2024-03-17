@@ -19,7 +19,7 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class PageAudit : ParentedAudit<Page, PageAudit, PageAudit.AuditAction> {
+class PageAudit : ParentedAudit<Workspace, Page, PageAudit, PageAudit.AuditAction> {
 
     enum class AuditAction {
         CREATED_PAGE,

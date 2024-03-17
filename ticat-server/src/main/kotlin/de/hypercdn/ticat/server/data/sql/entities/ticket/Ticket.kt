@@ -2,6 +2,7 @@ package de.hypercdn.ticat.server.data.sql.entities.ticket
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.audit.AuditAttachment
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.data.sql.base.history.HistoryAttachment
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
@@ -9,6 +10,7 @@ import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.board.Board
 import de.hypercdn.ticat.server.data.sql.entities.board.stage.BoardStage
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
+import de.hypercdn.ticat.server.data.sql.entities.ticket.audit.TicketAudit
 import de.hypercdn.ticat.server.data.sql.entities.ticket.history.TicketHistory
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import jakarta.persistence.*
@@ -22,7 +24,7 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Ticket : BaseEntity<Ticket>, HistoryAttachment<TicketHistory> {
+class Ticket : BaseEntity<Ticket>, HistoryAttachment<TicketHistory>, AuditAttachment<TicketAudit> {
 
     companion object
 

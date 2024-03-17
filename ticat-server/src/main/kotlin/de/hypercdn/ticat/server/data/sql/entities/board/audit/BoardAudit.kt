@@ -19,7 +19,7 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class BoardAudit : ParentedAudit<Board, BoardAudit, BoardAudit.AuditAction> {
+class BoardAudit : ParentedAudit<Workspace, Board, BoardAudit, BoardAudit.AuditAction> {
 
     enum class AuditAction {
         CREATED_BOARD,

@@ -2,7 +2,9 @@ package de.hypercdn.ticat.server.data.sql.entities.board
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.audit.AuditAttachment
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.data.sql.entities.board.audit.BoardAudit
 import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
@@ -18,7 +20,7 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class Board : BaseEntity<Board> {
+class Board : BaseEntity<Board>, AuditAttachment<BoardAudit> {
 
     companion object
 

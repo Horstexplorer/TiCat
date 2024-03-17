@@ -10,7 +10,7 @@ import java.util.*
 
 @MappedSuperclass
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-open class ParentedAudit<E, T, A> : Audit<E, T, A> where E : BaseEntity<E>, T : ParentedAudit<E, T, A>, A : Enum<A> {
+open class ParentedAudit<P, E, T, A> : Audit<E, T, A> where P: BaseEntity<P>, E : BaseEntity<E>, T : ParentedAudit<P, E, T, A>, A : Enum<A> {
 
     @Column(
         name = "parent_entity_uuid",
@@ -27,7 +27,7 @@ open class ParentedAudit<E, T, A> : Audit<E, T, A> where E : BaseEntity<E>, T : 
         updatable = false
     )
     @JsonIgnore
-    var parentEntity: E? = null
+    var parentEntity: P? = null
 
     @Column(
         name = "parent_entity_hint",

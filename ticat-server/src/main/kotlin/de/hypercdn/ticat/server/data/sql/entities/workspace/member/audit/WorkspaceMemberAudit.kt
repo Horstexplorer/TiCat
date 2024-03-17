@@ -19,7 +19,7 @@ import java.util.*
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class WorkspaceMemberAudit : ParentedAudit<WorkspaceMember, WorkspaceMemberAudit, WorkspaceMemberAudit.AuditAction> {
+class WorkspaceMemberAudit : ParentedAudit<Workspace, WorkspaceMember, WorkspaceMemberAudit, WorkspaceMemberAudit.AuditAction> {
 
     enum class AuditAction {
         MEMBERSHIP_REQUESTED,

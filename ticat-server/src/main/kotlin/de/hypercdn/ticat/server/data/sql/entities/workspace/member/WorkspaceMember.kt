@@ -2,10 +2,12 @@ package de.hypercdn.ticat.server.data.sql.entities.workspace.member
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
+import de.hypercdn.ticat.server.data.sql.base.audit.AuditAttachment
 import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
 import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
+import de.hypercdn.ticat.server.data.sql.entities.workspace.member.audit.WorkspaceMemberAudit
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import jakarta.persistence.*
 import jakarta.persistence.Table
@@ -20,7 +22,7 @@ import java.util.UUID
 @DynamicInsert
 @DynamicUpdate
 @JsonFilter(OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER)
-class WorkspaceMember : BaseEntity<WorkspaceMember> {
+class WorkspaceMember : BaseEntity<WorkspaceMember>, AuditAttachment<WorkspaceMemberAudit> {
 
     companion object
 
