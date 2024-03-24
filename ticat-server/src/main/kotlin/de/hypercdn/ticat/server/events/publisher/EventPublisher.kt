@@ -12,11 +12,20 @@ open class EventPublisher<T : Event>(
 }
 
 interface Event {
-    var uuid: UUID
+    val uuid: UUID
+    val creationTimestamp: OffsetDateTime
     var dispatchTimestamp: OffsetDateTime
+    val payload: Any?
 }
 
-abstract class GenericEvent : Event {
-    final override var uuid: UUID = UUID.randomUUID()
+interface TypedEvent<T>: Event {
+    override val payload: T?
+}
+
+open class GenericEvent(override val payload: Any? = null) : Event {
+    final override val uuid: UUID = UUID.randomUUID()
+    final override val creationTimestamp: OffsetDateTime = OffsetDateTime.now()
     override lateinit var dispatchTimestamp: OffsetDateTime
 }
+
+open class GenericTypedEvent<T>(override val payload: T?) : GenericEvent(), TypedEvent<T>

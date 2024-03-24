@@ -1,38 +1,31 @@
 package de.hypercdn.ticat.server.events.publisher
 
-import de.hypercdn.ticat.server.data.sql.entities.user.User
-import de.hypercdn.ticat.server.data.sql.entities.workspace.member.WorkspaceMember
-import org.springframework.context.ApplicationEventPublisher
+import de.hypercdn.ticat.server.data.sql.base.entity.BaseEntity
+import de.hypercdn.ticat.server.helper.ModificationContext
 
-interface EntityEvent<T> : Event {
-    val entity: T?
-}
-interface EntityCreateEvent<T> : EntityEvent<T>
-interface EntityChangeEvent<T> : EntityEvent<T> {
-    var newState: T
-    var oldState: T?
-}
-interface EntityDeleteEvent<ID, T> : EntityEvent<T> {
-    var entityID: ID
-}
-open class EntityCreateEventImp<T>(override val entity: T): EntityCreateEvent<T>, GenericEvent()
-open class EntityChangeEventImp<T>(override val entity: T, override var newState: T, override var oldState: T?) : EntityChangeEvent<T>, GenericEvent()
-open class EntityDeleteEventImp<ID, T>(override val entity: T?, override var entityID: ID) : EntityDeleteEvent<ID, T>, GenericEvent()
+interface EntityPayload<T> where T : BaseEntity<T>
 
-interface EventActorAttached {
-    var actor: EventActorContainer
+interface EntityCreatePayload<T>: EntityPayload<T> where T : BaseEntity<T> {
+    val newEntity: T
 }
 
-class EventActorContainer internal constructor(
-    val user: User?,
-    val member: WorkspaceMember?
-) {
-    companion object {
-        fun of(user: User, member: WorkspaceMember? = null): EventActorContainer {
-            member?.let { return EventActorContainer(member.user, member) }
-            return EventActorContainer(user, null)
-        }
-    }
+interface EntityModificationPayload<T>: EntityPayload<T> where T : BaseEntity<T> {
+    val modificationContext: ModificationContext<T>
 }
 
-open class EntityEventPublisher<T : EntityEvent<*>>(applicationEventPublisher: ApplicationEventPublisher): EventPublisher<T>(applicationEventPublisher)
+interface EntityDeletePayload<ID, T>: EntityPayload<T> where T : BaseEntity<T> {
+    val deletedEntityId: ID
+    val deletedEntity: T?
+}
+
+interface EntityEvent<T>: TypedEvent<T> where T : EntityPayload<*>
+open class GenericEntityEvent<T>(payload: T) : GenericTypedEvent<T>(payload), EntityEvent<T> where T : EntityPayload<*>
+
+interface EntityCreateEvent<T>: EntityEvent<EntityCreatePayload<T>> where T : BaseEntity<T>
+open class GenericEntityCreateEvent<T>(payload: EntityCreatePayload<T>) : GenericEntityEvent<EntityCreatePayload<T>>(payload), EntityCreateEvent<T> where T : BaseEntity<T>
+
+interface EntityModificationEvent<T> : EntityEvent<EntityModificationPayload<T>> where T : BaseEntity<T>
+open class GenericEntityModificationEvent<T>(payload: EntityModificationPayload<T>) : GenericEntityEvent<EntityModificationPayload<T>>(payload), EntityModificationEvent<T> where T : BaseEntity<T>
+
+interface EntityDeleteEvent<ID, T>: EntityEvent<EntityDeletePayload<ID, T>> where T : BaseEntity<T>
+open class GenericEntityDeleteEvent<ID, T>(payload: EntityDeletePayload<ID, T>) : GenericEntityEvent<EntityDeletePayload<ID, T>>(payload), EntityDeleteEvent<ID, T> where T : BaseEntity<T>
