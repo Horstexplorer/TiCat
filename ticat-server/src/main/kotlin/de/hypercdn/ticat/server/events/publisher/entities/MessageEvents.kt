@@ -2,21 +2,43 @@ package de.hypercdn.ticat.server.events.publisher.entities
 
 import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import de.hypercdn.ticat.server.events.publisher.base.*
-import java.util.UUID
+import de.hypercdn.ticat.server.helper.ModificationContext
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.stereotype.Service
+import java.util.*
 
-typealias MessagePayload = EntityPayload<Message>
-typealias MessageCreatePayload = EntityCreatePayload<Message>
-typealias MessageModificationPayload = EntityModificationPayload<Message>
-typealias MessageDeletePayload = EntityDeletePayload<UUID, Message>
+interface MessagePayload: EntityPayload<Message>
+open class MessageCreatePayload(
+    newEntity: Message
+) : EntityCreatePayload<Message>(newEntity), MessagePayload
+open class MessageModificationPayload(
+    modificationContext: ModificationContext<Message>
+): EntityModificationPayload<Message>(modificationContext), MessagePayload
+open class MessageDeletePayload(
+    deletedEntityId: UUID,
+    deletedEntity: Message? = null
+): EntityDeletePayload<UUID, Message>(deletedEntityId, deletedEntity), MessagePayload
 
-interface MessageEvent<T>: EntityEvent<T> where T : MessagePayload
-open class GenericMessageEvent<T>(payload: T): GenericEntityEvent<T>(payload), MessageEvent<T> where T : MessagePayload
+interface MessageEvent<out T>: EntityEvent<Message, T> where T : MessagePayload
 
-interface MessageCreateEvent: EntityCreateEvent<Message>, MessageEvent<MessageCreatePayload>
-class MessageCreateEventImp(payload: MessageCreatePayload): GenericMessageEvent<MessageCreatePayload>(payload), MessageCreateEvent
+interface MessageCreateEvent: EntityCreateEvent<Message, MessageCreatePayload>, MessageEvent<MessageCreatePayload>
+open class MessageCreateEventImp(payload: MessageCreatePayload): GenericEntityCreateEvent<Message, MessageCreatePayload>(payload), MessageCreateEvent
 
-interface MessageModificationEvent: EntityModificationEvent<Message>, MessageEvent<MessageModificationPayload>
-class MessageModificationEventImp(payload: MessageModificationPayload): GenericMessageEvent<MessageModificationPayload>(payload), MessageModificationEvent
+interface MessageModificationEvent: EntityModifyEvent<Message, MessageModificationPayload>, MessageEvent<MessageModificationPayload>
+open class MessageModificationEventImp(payload: MessageModificationPayload): GenericEntityModifyEvent<Message, MessageModificationPayload>(payload), MessageModificationEvent
 
-interface MessageDeleteEvent: EntityDeleteEvent<UUID, Message>, MessageEvent<MessageDeletePayload>
-class MessageDeleteEventImp(payload: MessageDeletePayload): GenericMessageEvent<MessageDeletePayload>(payload), MessageDeleteEvent
+interface MessageDeleteEvent: EntityDeleteEvent<Message, MessageDeletePayload>, MessageEvent<MessageDeletePayload>
+open class MessageDeleteEventImp(payload: MessageDeletePayload): GenericEntityDeleteEvent<Message, MessageDeletePayload>(payload), MessageDeleteEvent
+
+@Service
+class MessageEventPublisher(
+    applicationEventPublisher: ApplicationEventPublisher
+) : EntityEventPublisher<MessageEvent<*>>(applicationEventPublisher) {
+    fun publishMessageCreate(message: Message) = dispatch(MessageCreateEventImp(MessageCreatePayload(message)))
+
+    fun publishMessageModification(context: ModificationContext<Message>) = dispatch(MessageModificationEventImp(MessageModificationPayload(context)))
+
+    fun publishMessageDelete(id: UUID) = dispatch(MessageDeleteEventImp(MessageDeletePayload(id)))
+
+    fun publishMessageDelete(message: Message) = dispatch(MessageDeleteEventImp(MessageDeletePayload(message.uuid, message)))
+}

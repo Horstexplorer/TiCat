@@ -2,21 +2,43 @@ package de.hypercdn.ticat.server.events.publisher.entities
 
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
 import de.hypercdn.ticat.server.events.publisher.base.*
-import java.util.UUID
+import de.hypercdn.ticat.server.helper.ModificationContext
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.stereotype.Service
+import java.util.*
 
-typealias TicketPayload = EntityPayload<Ticket>
-typealias TicketCreatePayload = EntityCreatePayload<Ticket>
-typealias TicketModificationPayload = EntityModificationPayload<Ticket>
-typealias TicketDeletePayload = EntityDeletePayload<UUID, Ticket>
+interface TicketPayload: EntityPayload<Ticket>
+open class TicketCreatePayload(
+    newEntity: Ticket
+) : EntityCreatePayload<Ticket>(newEntity), TicketPayload
+open class TicketModificationPayload(
+    modificationContext: ModificationContext<Ticket>
+): EntityModificationPayload<Ticket>(modificationContext), TicketPayload
+open class TicketDeletePayload(
+    deletedEntityId: UUID,
+    deletedEntity: Ticket? = null
+): EntityDeletePayload<UUID, Ticket>(deletedEntityId, deletedEntity), TicketPayload
 
-interface TicketEvent<T>: EntityEvent<T> where T : TicketPayload
-open class GenericTicketEvent<T>(payload: T): GenericEntityEvent<T>(payload), TicketEvent<T> where T : TicketPayload
+interface TicketEvent<out T>: EntityEvent<Ticket, T> where T : TicketPayload
 
-interface TicketCreateEvent: EntityCreateEvent<Ticket>, TicketEvent<TicketCreatePayload>
-class TicketCreateEventImp(payload: TicketCreatePayload): GenericTicketEvent<TicketCreatePayload>(payload), TicketCreateEvent
+interface TicketCreateEvent: EntityCreateEvent<Ticket, TicketCreatePayload>, TicketEvent<TicketCreatePayload>
+open class TicketCreateEventImp(payload: TicketCreatePayload): GenericEntityCreateEvent<Ticket, TicketCreatePayload>(payload), TicketCreateEvent
 
-interface TicketModificationEvent: EntityModificationEvent<Ticket>, TicketEvent<TicketModificationPayload>
-class TicketModificationEventImp(payload: TicketModificationPayload): GenericTicketEvent<TicketModificationPayload>(payload), TicketModificationEvent
+interface TicketModificationEvent: EntityModifyEvent<Ticket, TicketModificationPayload>, TicketEvent<TicketModificationPayload>
+open class TicketModificationEventImp(payload: TicketModificationPayload): GenericEntityModifyEvent<Ticket, TicketModificationPayload>(payload), TicketModificationEvent
 
-interface TicketDeleteEvent: EntityDeleteEvent<UUID, Ticket>, TicketEvent<TicketDeletePayload>
-class TicketDeleteEventImp(payload: TicketDeletePayload): GenericTicketEvent<TicketDeletePayload>(payload), TicketDeleteEvent
+interface TicketDeleteEvent: EntityDeleteEvent<Ticket, TicketDeletePayload>, TicketEvent<TicketDeletePayload>
+open class TicketDeleteEventImp(payload: TicketDeletePayload): GenericEntityDeleteEvent<Ticket, TicketDeletePayload>(payload), TicketDeleteEvent
+
+@Service
+class TicketEventPublisher(
+    applicationEventPublisher: ApplicationEventPublisher
+) : EntityEventPublisher<TicketEvent<*>>(applicationEventPublisher) {
+    fun publishTicketCreate(ticket: Ticket) = dispatch(TicketCreateEventImp(TicketCreatePayload(ticket)))
+
+    fun publishTicketModification(context: ModificationContext<Ticket>) = dispatch(TicketModificationEventImp(TicketModificationPayload(context)))
+
+    fun publishTicketDelete(id: UUID) = dispatch(TicketDeleteEventImp(TicketDeletePayload(id)))
+
+    fun publishTicketDelete(ticket: Ticket) = dispatch(TicketDeleteEventImp(TicketDeletePayload(ticket.uuid, ticket)))
+}
