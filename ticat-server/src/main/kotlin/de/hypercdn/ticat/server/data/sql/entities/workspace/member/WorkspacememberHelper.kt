@@ -31,11 +31,12 @@ class EffectivePermission(user: User?, workspace: Workspace?, member: WorkspaceM
         }
     }
 
-    fun hasPagePermission(requested: PagePermission): Boolean = requested.value <= pagePermission.value
-    fun hasBoardPermission(requested: BoardPermission): Boolean = requested.value <= boardPermission.value
-    fun hasTicketPermission(requested: TicketPermission): Boolean = requested.value <= ticketPermission.value
-    fun hasWorkspacePermission(requested: WorkspacePermission): Boolean = requested.value <= workspacePermission.value
+    fun hasPagePermissionOrHigher(requested: PagePermission): Boolean = requested.value <= pagePermission.value
+    fun hasBoardPermissionOrHigher(requested: BoardPermission): Boolean = requested.value <= boardPermission.value
+    fun hasTicketPermissionOrHigher(requested: TicketPermission): Boolean = requested.value <= ticketPermission.value
+    fun hasWorkspacePermissionOrHigher(requested: WorkspacePermission): Boolean = requested.value <= workspacePermission.value
 }
 
 fun WorkspaceMember.effectivePermission() = EffectivePermission(this.user, this.workspace, this)
 fun WorkspaceMember.effectivePermission(user: User? = null, workspace: Workspace? = null) = EffectivePermission(user, workspace, this)
+

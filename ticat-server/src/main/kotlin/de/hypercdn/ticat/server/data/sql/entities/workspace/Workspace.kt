@@ -100,9 +100,9 @@ class Workspace : BaseEntity<Workspace>, HistoryAttachment<WorkspaceHistory>, Au
         var visibility: Visibility = Visibility.MEMBERS_ONLY
 
         enum class Visibility {
-            ANYONE,
-            LOGGED_IN_USER,
-            MEMBERS_ONLY
+            ANYONE,             // anyone (including guest) can see the workspace
+            LOGGED_IN_USER,     // anyone (not including guest, only logged-in user) can see the workspace
+            MEMBERS_ONLY        // only members of the workspace can see it
         }
 
         @Column(
@@ -114,9 +114,9 @@ class Workspace : BaseEntity<Workspace>, HistoryAttachment<WorkspaceHistory>, Au
         var accessMode: AccessMode = AccessMode.INVITE_ONLY
 
         enum class AccessMode {
-            PUBLIC,
-            REQUEST_BASED,
-            INVITE_ONLY
+            PUBLIC_JOIN,        // Users can join at their own discretion
+            REQUEST_BASED,      // Users can request access to the workspace (excluding guest)
+            INVITE_ONLY         // Users must have been invited by an authorized member
         }
 
         @Column(
@@ -128,9 +128,9 @@ class Workspace : BaseEntity<Workspace>, HistoryAttachment<WorkspaceHistory>, Au
         var status: Status = Status.ACTIVE
 
         enum class Status {
-            ACTIVE,
-            ARCHIVED,
-            DELETED
+            ACTIVE,             // All functions available
+            ARCHIVED,           // Workspace can no longer be edited, but possible to revert to ACTIVE
+            DELETED             // Workspace can no longer be accessed
         }
 
         @Column(

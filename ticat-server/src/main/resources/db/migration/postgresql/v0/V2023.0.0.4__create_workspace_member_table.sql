@@ -21,10 +21,11 @@ CREATE TYPE WORKSPACE_MEMBER_BOARD_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_
 -- CAN_VIEW_CREATE_EDIT_DELETE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive or delete not owned entities unless blocked by parent entity.
 CREATE TYPE WORKSPACE_MEMBER_TICKET_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
 -- DENY: No Access
--- CAN_VIEW: Can view existing entities
--- CAN_VIEW_MANAGE_MEMBERS: Can view existing entities. Can manage entities.
+-- CAN_VIEW: Can view content
+-- CAN_VIEW_EDIT: Can view and edit board primary content
+-- CAN_VIEW_EDIT_MANAGE_MEMBERS: Can view and edit board primary content. Can manage other users permissions.
 -- CAN_ADMINISTRATE: Can view existing entities. Can manage entities. Overrides all other permissions within sub scopes.
-CREATE TYPE WORKSPACE_MEMBER_WORKSPACE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_MANAGE_MEMBERS', 'CAN_ADMINISTRATE');
+CREATE TYPE WORKSPACE_MEMBER_WORKSPACE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_EDIT' 'CAN_VIEW_EDIT_MANAGE', 'CAN_ADMINISTRATE');
 
 -- Representing a user within the context of a workspace
 CREATE TABLE workspace_members
