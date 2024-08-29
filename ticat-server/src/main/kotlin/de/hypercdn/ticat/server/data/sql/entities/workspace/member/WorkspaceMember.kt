@@ -110,8 +110,9 @@ class WorkspaceMember : BaseEntity<WorkspaceMember>, AuditAttachment<WorkspaceMe
         enum class PagePermission(val value: Int) {
             DENY(0),
             CAN_VIEW(1),
-            CAN_VIEW_CREATE_EDIT(2),
-            CAN_VIEW_CREATE_EDIT_DELETE(3)
+            CAN_VIEW_CREATE(2),
+            CAN_VIEW_CREATE_EDIT(3),
+            CAN_VIEW_CREATE_EDIT_DELETE(4)
         }
 
         @Column(
@@ -124,8 +125,9 @@ class WorkspaceMember : BaseEntity<WorkspaceMember>, AuditAttachment<WorkspaceMe
         enum class BoardPermission(val value: Int) {
             DENY(0),
             CAN_VIEW(1),
-            CAN_VIEW_CREATE_EDIT(2),
-            CAN_VIEW_CREATE_EDIT_DELETE(3)
+            CAN_VIEW_CREATE(2),
+            CAN_VIEW_CREATE_EDIT(3),
+            CAN_VIEW_CREATE_EDIT_DELETE(4)
         }
 
         @Column(
@@ -138,8 +140,9 @@ class WorkspaceMember : BaseEntity<WorkspaceMember>, AuditAttachment<WorkspaceMe
         enum class TicketPermission(val value: Int) {
             DENY(0),
             CAN_VIEW(1),
-            CAN_VIEW_CREATE_EDIT(2),
-            CAN_VIEW_CREATE_EDIT_DELETE(3)
+            CAN_VIEW_CREATE(2),
+            CAN_VIEW_CREATE_EDIT(3),
+            CAN_VIEW_CREATE_EDIT_DELETE(4)
         }
 
         @Column(
@@ -152,9 +155,8 @@ class WorkspaceMember : BaseEntity<WorkspaceMember>, AuditAttachment<WorkspaceMe
         enum class WorkspacePermission(val value: Int) {
             DENY(0),
             CAN_VIEW(1),
-            CAN_VIEW_EDIT(2),
-            CAN_VIEW_EDIT_MANAGE_MEMBERS(3),
-            CAN_ADMINISTRATE(4),
+            CAN_VIEW_MANAGE_MEMBERS(2),
+            CAN_ADMINISTRATE(3),
         }
 
         constructor()

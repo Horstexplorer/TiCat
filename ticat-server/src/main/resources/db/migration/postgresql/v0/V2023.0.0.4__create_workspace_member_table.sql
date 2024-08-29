@@ -2,13 +2,29 @@ START TRANSACTION;
 
 CREATE TYPE WORKSPACE_MEMBER_MEMBERSHIP_STATUS AS ENUM ('MEMBERSHIP_REQUESTED', 'MEMBERSHIP_OFFERED', 'MEMBERSHIP_GRANTED', 'MEMBERSHIP_DENIED');
 
-CREATE TYPE WORKSPACE_MEMBER_PAGE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
-
-CREATE TYPE WORKSPACE_MEMBER_BOARD_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
-
-CREATE TYPE WORKSPACE_MEMBER_TICKET_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
-
-CREATE TYPE WORKSPACE_MEMBER_WORKSPACE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_EDIT', 'CAN_VIEW_EDIT_MANAGE_MEMBERS', 'CAN_ADMINISTRATE');
+-- DENY: No Access
+-- CAN_VIEW: Can view existing entities
+-- CAN_VIEW_CREATE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity.
+-- CAN_VIEW_CREATE_EDIT: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive not owned entities unless blocked by parent entity.
+-- CAN_VIEW_CREATE_EDIT_DELETE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive or delete not owned entities unless blocked by parent entity.
+CREATE TYPE WORKSPACE_MEMBER_PAGE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
+-- DENY: No Access
+-- CAN_VIEW: Can view existing entities
+-- CAN_VIEW_CREATE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity.
+-- CAN_VIEW_CREATE_EDIT: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive not owned entities unless blocked by parent entity.
+-- CAN_VIEW_CREATE_EDIT_DELETE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive or delete not owned entities unless blocked by parent entity.
+CREATE TYPE WORKSPACE_MEMBER_BOARD_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
+-- DENY: No Access
+-- CAN_VIEW: Can view existing entities
+-- CAN_VIEW_CREATE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity.
+-- CAN_VIEW_CREATE_EDIT: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive not owned entities unless blocked by parent entity.
+-- CAN_VIEW_CREATE_EDIT_DELETE: Can view existing entities. Can create new entities. Can modify, archive and delete owned entities unless blocked by parent entity. Can modify, archive or delete not owned entities unless blocked by parent entity.
+CREATE TYPE WORKSPACE_MEMBER_TICKET_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_CREATE', 'CAN_VIEW_CREATE_EDIT', 'CAN_VIEW_CREATE_EDIT_DELETE');
+-- DENY: No Access
+-- CAN_VIEW: Can view existing entities
+-- CAN_VIEW_MANAGE_MEMBERS: Can view existing entities. Can manage entities.
+-- CAN_ADMINISTRATE: Can view existing entities. Can manage entities. Overrides all other permissions within sub scopes.
+CREATE TYPE WORKSPACE_MEMBER_WORKSPACE_PERMISSION AS ENUM ('DENY', 'CAN_VIEW', 'CAN_VIEW_MANAGE_MEMBERS', 'CAN_ADMINISTRATE');
 
 -- Representing a user within the context of a workspace
 CREATE TABLE workspace_members
