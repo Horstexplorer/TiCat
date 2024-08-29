@@ -30,7 +30,7 @@ class ModifyWorkspaceMembersAndSettingsRule : AccessRule<Workspace, WorkspaceExe
             return false
         if (accessorContainer.user?.uuid == instance.creatorUUID)
             return true
-        if (accessorContainer.member?.uuid == instance.creatorUUID)
+        if (accessorContainer.member?.userUUID == instance.creatorUUID)
             return true
         if (accessorContainer.member == null)
             return false

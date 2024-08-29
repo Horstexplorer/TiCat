@@ -29,7 +29,7 @@ class ViewWorkspaceRule : AccessRule<Workspace, WorkspaceExecutableAction, Works
             return false
         if (accessorContainer.user?.uuid == instance.creatorUUID)
             return true
-        if (accessorContainer.member?.uuid == instance.creatorUUID)
+        if (accessorContainer.member?.userUUID == instance.creatorUUID)
             return true
         if (accessorContainer.member == null)
             return false

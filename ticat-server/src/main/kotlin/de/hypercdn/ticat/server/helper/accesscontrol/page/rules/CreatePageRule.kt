@@ -35,7 +35,7 @@ class CreatePageRule : AccessRule<Page, PageExecutableAction, WorkspaceScopedAcc
             return false
         if (accessorContainer.user?.uuid == workspace.creatorUUID)
             return true
-        if (accessorContainer.member?.uuid == workspace.creatorUUID)
+        if (accessorContainer.member?.userUUID == workspace.creatorUUID)
             return true
         if (accessorContainer.member == null)
             return false

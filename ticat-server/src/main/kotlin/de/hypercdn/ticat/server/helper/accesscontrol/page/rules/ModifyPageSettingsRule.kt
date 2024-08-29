@@ -39,7 +39,7 @@ class ModifyPageSettingsRule : AccessRule<Page, PageExecutableAction, WorkspaceS
             return false
         if (accessorContainer.user?.uuid == workspace.creatorUUID)
             return true
-        if (accessorContainer.member?.uuid == workspace.creatorUUID)
+        if (accessorContainer.member?.userUUID == workspace.creatorUUID)
             return true
         if (accessorContainer.member == null)
             return false
@@ -48,7 +48,7 @@ class ModifyPageSettingsRule : AccessRule<Page, PageExecutableAction, WorkspaceS
             return true
         if (effectivePermission.hasPagePermissionOrHigher(WorkspaceMember.Permissions.PagePermission.CAN_VIEW_CREATE_EDIT))
             return true
-        if (accessorContainer.member.uuid == instance.creatorUUID
+        if (accessorContainer.member.userUUID == instance.creatorUUID
             && effectivePermission.hasPagePermissionOrHigher(WorkspaceMember.Permissions.PagePermission.CAN_VIEW_CREATE))
             return true
         return false
