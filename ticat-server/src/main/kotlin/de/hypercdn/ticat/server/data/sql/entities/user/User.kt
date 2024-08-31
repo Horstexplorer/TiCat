@@ -100,7 +100,8 @@ class User : BaseEntity<User>, AuditAttachment<UserAudit> {
     enum class AccountType {
         SYSTEM,
         ADMIN,
-        DEFAULT
+        DEFAULT,
+        GUEST
     }
 
     @Embedded
@@ -176,6 +177,20 @@ class User : BaseEntity<User>, AuditAttachment<UserAudit> {
         }
 
         @Column(
+            name = "setting_user_account_visibility",
+            nullable = false
+        )
+        @ColumnDefault("LOGGED_IN_USER")
+        @Enumerated(EnumType.STRING)
+        var accountVisibility: AccountVisibility = AccountVisibility.LOGGED_IN_USER
+
+        enum class AccountVisibility {
+            ANYONE,
+            LOGGED_IN_USER,
+            ADMIN_ONLY
+        }
+
+        @Column(
             name = "setting_status",
             nullable = false
         )
@@ -199,6 +214,7 @@ class User : BaseEntity<User>, AuditAttachment<UserAudit> {
         constructor(other: Settings) {
             this.receiveWorkspaceInvitationsFromOrigin = other.receiveWorkspaceInvitationsFromOrigin
             this.receiveMessagesFromOrigin = other.receiveMessagesFromOrigin
+            this.accountVisibility = other.accountVisibility
             this.status = other.status
             this.locale = other.locale
         }

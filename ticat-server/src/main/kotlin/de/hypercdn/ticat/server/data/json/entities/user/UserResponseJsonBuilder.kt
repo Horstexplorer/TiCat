@@ -1,8 +1,8 @@
 package de.hypercdn.ticat.server.data.json.entities.user
 
-import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.user.effectivePermissions
+import de.hypercdn.ticat.server.helper.EntityTemplateBuilder
 
 class UserResponseJsonBuilder(
     private val user: User? = null
@@ -86,6 +86,7 @@ class UserResponseJsonBuilder(
         it.settings = UserResponseJson.Settings().apply {
             receiveWorkspaceInvitationsFromOrigin = user?.settings?.receiveWorkspaceInvitationsFromOrigin
             receiveMessagesFromOrigin = user?.settings?.receiveMessagesFromOrigin
+            accountVisibility = user?.settings?.accountVisibility
             status = user?.settings?.status
             locale = user?.settings?.locale
         }

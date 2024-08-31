@@ -1,9 +1,9 @@
 package de.hypercdn.ticat.server.data.json.entities.user
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import de.hypercdn.ticat.server.data.sql.entities.user.User
+import de.hypercdn.ticat.server.data.sql.entities.user.User.Settings.AccountVisibility
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -84,6 +84,10 @@ class UserResponseJson {
         @JsonProperty(value = "setting_receive_messages_from_origin", required = false)
         @JsonInclude(JsonInclude.Include.NON_NULL)
         var receiveMessagesFromOrigin: User.Settings.MessageOrigin? = null
+
+        @JsonProperty(value = "setting_user_account_visibility", required = false)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var accountVisibility: AccountVisibility? = null
 
         @JsonProperty(value = "setting_status", required = false)
         @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -1,10 +1,12 @@
 START TRANSACTION;
 
-CREATE TYPE USER_ACCOUNT_TYPE AS ENUM ('SYSTEM', 'ADMIN', 'DEFAULT');
+CREATE TYPE USER_ACCOUNT_TYPE AS ENUM ('SYSTEM', 'ADMIN', 'DEFAULT', 'GUEST');
 
 CREATE TYPE USER_SETTING_WORKSPACE_INVITATION_ORIGIN AS ENUM ('ANYONE', 'NOBODY');
 
 CREATE TYPE USER_SETTING_MESSAGE_ORIGIN AS ENUM ('ANYONE', 'WORKSPACE_MEMBER', 'NOBODY');
+
+CREATE TYPE USER_SETTING_ACCOUNT_VISIBILITY AS ENUM ('ANYONE', 'LOGGED_IN_USERS', 'ADMIN_ONLY');
 
 CREATE TYPE USER_SETTING_STATUS AS ENUM ('ACTIVE', 'DISABLED');
 
@@ -31,6 +33,7 @@ CREATE TABLE users
 
     setting_receive_workspace_invitations_from_origin USER_SETTING_WORKSPACE_INVITATION_ORIGIN NOT NULL DEFAULT 'ANYONE',
     setting_receive_messages_from_origin              USER_SETTING_MESSAGE_ORIGIN              NOT NULL DEFAULT 'WORKSPACE_MEMBER',
+    setting_user_account_visibility                   USER_SETTING_ACCOUNT_VISIBILITY          NOT NULL DEFAULT 'LOGGED_IN_USERS',
     setting_status                                    USER_SETTING_STATUS                      NOT NULL DEFAULT 'ACTIVE',
     setting_locale                                    VARCHAR(5)                                        DEFAULT NULL,
 
@@ -44,7 +47,7 @@ INSERT INTO users (uuid, display_name, account_type, setting_receive_workspace_i
                    setting_receive_messages_from_origin, setting_status)
 VALUES ('00000000-0000-4000-0000-000000000000', 'System', 'SYSTEM', 'NOBODY', 'NOBODY',
         'DISABLED'), -- placeholder for system user
-       ('00000000-0000-4000-0000-000000000002', 'Guest', 'SYSTEM', 'NOBODY', 'NOBODY',
+       ('00000000-0000-4000-0000-000000000002', 'Guest', 'GUEST', 'NOBODY', 'NOBODY',
         'ACTIVE'); -- placeholder for anonymous auth, may be enabled when required
 
 -- Representing a known jwt entity to reduce updates of the user entity
