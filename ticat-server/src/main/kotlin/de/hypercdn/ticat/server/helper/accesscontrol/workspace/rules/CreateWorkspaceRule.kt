@@ -13,13 +13,13 @@ class CreateWorkspaceRule : AccessRule<Workspace, WorkspaceExecutableAction, Wor
     override fun isApplicableForRequest(request: WorkspaceExecutableAction): Boolean = WorkspaceExecutableAction.CREATE_WORKSPACE == request
 
     override fun definition(): AccessRuleContext<Workspace, WorkspaceExecutableAction, WorkspaceAccessor>.() -> Unit = {
-        exitWithFailureIfTrue("Accessor has been defined") {
-            input?.accessor?.isEmpty() == false
+        exitWithFailureIfFalse("Accessor has to been defined") {
+            input?.accessor?.isEmpty() != false
         }
-        exitWithFailureIfTrue("No workspace has been defined") {
+        exitWithFailureIfTrue("Workspace cannot be defined") {
             input?.entity == null
         }
-        exitWithSuccessIfTrue("User is admin") {
+        exitWithSuccessIfTrue("User is of AccountType.ADMIN") {
             input?.accessor?.user?.accountType == User.AccountType.ADMIN
         }
         exitWithSuccessIfTrue("User has permission to create workspace") {

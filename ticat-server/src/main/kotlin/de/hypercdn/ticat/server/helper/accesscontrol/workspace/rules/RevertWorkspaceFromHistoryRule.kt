@@ -7,39 +7,39 @@ import de.hypercdn.ticat.server.data.sql.entities.workspace.isDeleted
 import de.hypercdn.ticat.server.data.sql.entities.workspace.member.WorkspaceMember
 import de.hypercdn.ticat.server.data.sql.entities.workspace.member.effectivePermission
 import de.hypercdn.ticat.server.helper.accesscontrol.AccessRule
+import de.hypercdn.ticat.server.helper.accesscontrol.AccessRuleContext
 import de.hypercdn.ticat.server.helper.accesscontrol.workspace.WorkspaceAccessor
 import de.hypercdn.ticat.server.helper.accesscontrol.workspace.WorkspaceExecutableAction
 
-class RevertWorkspaceFromHistoryRule : AccessRule<Workspace, WorkspaceExecutableAction, WorkspaceAccessor> {
+class RevertWorkspaceFromHistoryRule : AccessRule<Workspace, WorkspaceExecutableAction, WorkspaceAccessor>() {
     override fun isApplicableForRequest(request: WorkspaceExecutableAction): Boolean {
         return WorkspaceExecutableAction.REVERT_FROM_HISTORY == request
     }
 
-    override fun testGrant(
-        instance: Workspace?,
-        request: WorkspaceExecutableAction,
-        accessorContainer: WorkspaceAccessor
-    ): Boolean {
-        if (instance == null)
-            return false
-        if (accessorContainer.isEmpty())
-            return false
-        if (accessorContainer.user?.accountType == User.AccountType.ADMIN)
-            return true
-        if (instance.isDeleted())
-            return false
-        if (instance.isArchived())
-            return false
-        if (accessorContainer.user?.uuid == instance.creatorUUID)
-            return true
-        if (accessorContainer.member?.userUUID == instance.creatorUUID)
-            return true
-        if (accessorContainer.member == null)
-            return false
-        val effectivePermission = accessorContainer.member.effectivePermission()
-        if (effectivePermission.hasWorkspacePermissionOrHigher(WorkspaceMember.Permissions.WorkspacePermission.CAN_VIEW_EDIT_MANAGE))
-            return true
-        return false
+    override fun definition(): AccessRuleContext<Workspace, WorkspaceExecutableAction, WorkspaceAccessor>.() -> Unit = {
+        exitWithFailureIfFalse("Accessor has to been defined") {
+            input?.accessor?.isEmpty() != false
+        }
+        exitWithFailureIfFalse("Workspace must be defined") {
+            input?.entity != null
+        }
+        exitWithSuccessIfTrue("User is of AccountType.ADMIN") {
+            input?.accessor?.user?.accountType == User.AccountType.ADMIN
+        }
+        exitWithFailureIfTrue("Workspace has been archived or deleted") {
+            input?.entity?.isArchived() == true
+                    || input?.entity?.isDeleted() == true
+        }
+        exitWithSuccessIfTrue("User / Member created this workspace") {
+            (input?.accessor?.user != null
+                    && input.accessor.user.uuid == input.entity?.creatorUUID)
+                    || (input?.accessor?.member != null
+                    && input.accessor.member.userUUID == input.entity?.creatorUUID)
+        }
+        exitWithSuccessIfTrue("Member has permission to manage this workspace") {
+            val effectivePermission = input?.accessor?.member?.effectivePermission()
+            effectivePermission?.hasWorkspacePermissionOrHigher(WorkspaceMember.Permissions.WorkspacePermission.CAN_VIEW_EDIT_MANAGE) == true
+        }
     }
 
 }

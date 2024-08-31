@@ -15,6 +15,10 @@ open class RuleContext<T>(val input: T?) where T : RuleInput {
     private val resultCache = ArrayList<ConditionResult>()
     private val logger: KLogger = KotlinLogging.logger {}
 
+    fun results(): List<ConditionResult> = resultCache.toList()
+    fun failedConditions(): List<ConditionResult> = resultCache.filter { !it.success }
+    fun booleanResult(): Boolean = resultCache.isNotEmpty() && resultCache.all { it.success }
+
     fun condition(
         description: String,
         conditionSucceedsWith: Boolean = true,
@@ -22,18 +26,24 @@ open class RuleContext<T>(val input: T?) where T : RuleInput {
         terminateIfSuccess: Boolean = false,
         condition: () -> Boolean?
     ) {
-        val conditionDetails = ConditionResult(description, conditionSucceedsWith == condition())
-        resultCache.add(conditionDetails)
-        if (conditionDetails.success) {
-            logger.trace { "Condition ${conditionDetails.description} matched." }
+        val result = registerResult(description, conditionSucceedsWith == condition())
+        if (result.success) {
+            logger.trace { "Condition ${result.description} matched." }
             if (terminateIfSuccess)
-                throw ContextStopEvaluationException("Caused matching condition $description")
+                exitEvaluation("Caused by matching condition $description")
         } else {
-            logger.trace { "Condition ${conditionDetails.description} failed to match. ($conditionSucceedsWith was not ${!conditionSucceedsWith})" }
+            logger.trace { "Condition ${result.description} failed to match. ($conditionSucceedsWith was not ${!conditionSucceedsWith})" }
             if (terminateIfNotSuccess)
-                throw ContextStopEvaluationException("Caused by failure to match condition $description")
+                exitEvaluation("Caused by failure to match condition $description")
         }
     }
+
+    fun exitEvaluation(message: String = "No exit message specified") {
+        throw ContextStopEvaluationException(message)
+    }
+
+    fun registerResult(description: String, success: Boolean): ConditionResult =
+        ConditionResult(description, success).also { resultCache.add(it) }
 
     fun exitWithSuccess(description: String, conditionSucceedsWith: Boolean = true, condition: () -> Boolean?) =
         condition(
@@ -60,14 +70,10 @@ open class RuleContext<T>(val input: T?) where T : RuleInput {
         )
 
     fun exitWithFailureIfTrue(description: String, condition: () -> Boolean?) =
-        exitWithFailure(description, conditionSucceedsWith = true, condition)
-
-    fun exitWithFailureIfFalse(description: String, condition: () -> Boolean?) =
         exitWithFailure(description, conditionSucceedsWith = false, condition)
 
-    fun results(): List<ConditionResult> = resultCache.toList()
-    fun failedConditions(): List<ConditionResult> = resultCache.filter { !it.success }
-    fun booleanResult(): Boolean = resultCache.all { it.success }
+    fun exitWithFailureIfFalse(description: String, condition: () -> Boolean?) =
+        exitWithFailure(description, conditionSucceedsWith = true, condition)
 
 }
 
@@ -79,7 +85,6 @@ abstract class Rule<T, I> where T : RuleContext<I>, I : RuleInput {
             context.apply(definition())
         } catch (_: ContextStopEvaluationException) {}
         return context.booleanResult()
-
     }
 
     abstract fun newContext(input: I?): T

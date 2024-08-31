@@ -1,7 +1,6 @@
 package de.hypercdn.ticat.server.helper.accesscontrol.page.rules
 
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
-import de.hypercdn.ticat.server.data.sql.entities.page.isArchived
 import de.hypercdn.ticat.server.data.sql.entities.page.isDeleted
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.isArchived
@@ -9,48 +8,48 @@ import de.hypercdn.ticat.server.data.sql.entities.workspace.isDeleted
 import de.hypercdn.ticat.server.data.sql.entities.workspace.member.WorkspaceMember
 import de.hypercdn.ticat.server.data.sql.entities.workspace.member.effectivePermission
 import de.hypercdn.ticat.server.helper.accesscontrol.AccessRule
+import de.hypercdn.ticat.server.helper.accesscontrol.AccessRuleContext
 import de.hypercdn.ticat.server.helper.accesscontrol.page.PageExecutableAction
 import de.hypercdn.ticat.server.helper.accesscontrol.workspace.WorkspaceScopedAccessor
 
-class DeletePageRule : AccessRule<Page, PageExecutableAction, WorkspaceScopedAccessor> {
+class DeletePageRule : AccessRule<Page, PageExecutableAction, WorkspaceScopedAccessor>() {
     override fun isApplicableForRequest(request: PageExecutableAction): Boolean {
         return PageExecutableAction.DELETE_PAGE == request
     }
 
-    override fun testGrant(
-        instance: Page?,
-        request: PageExecutableAction,
-        accessorContainer: WorkspaceScopedAccessor
-    ): Boolean {
-        if (instance == null)
-            return false
-        if (accessorContainer.isEmpty())
-            return false
-        if (accessorContainer.workspace == null)
-            return false
-        val workspace = accessorContainer.workspace
-        if (accessorContainer.user?.accountType == User.AccountType.ADMIN)
-            return true
-        if (workspace.isDeleted())
-            return false
-        if (workspace.isArchived())
-            return false
-        if (instance.isDeleted())
-            return false
-        if (accessorContainer.user?.uuid == workspace.creatorUUID)
-            return true
-        if (accessorContainer.member?.userUUID == workspace.creatorUUID)
-            return true
-        if (accessorContainer.member == null)
-            return false
-        val effectivePermission = accessorContainer.member.effectivePermission()
-        if (effectivePermission.hasWorkspacePermissionOrHigher(WorkspaceMember.Permissions.WorkspacePermission.CAN_ADMINISTRATE))
-            return true
-        if (effectivePermission.hasPagePermissionOrHigher(WorkspaceMember.Permissions.PagePermission.CAN_VIEW_CREATE_EDIT_DELETE))
-            return true
-        if (accessorContainer.member.userUUID == instance.creatorUUID
-            && effectivePermission.hasPagePermissionOrHigher(WorkspaceMember.Permissions.PagePermission.CAN_VIEW_CREATE))
-            return true
-        return false
+    override fun definition(): AccessRuleContext<Page, PageExecutableAction, WorkspaceScopedAccessor>.() -> Unit = {
+        exitWithFailureIfFalse("Accessor has to been defined") {
+            input?.accessor?.isEmpty() != false
+        }
+        exitWithFailureIfFalse("Workspace must be defined") {
+            input?.accessor?.workspace != null
+        }
+        exitWithFailureIfTrue("Page must be defined") {
+            input?.entity != null
+        }
+        exitWithSuccessIfTrue("User is of AccountType.ADMIN") {
+            input?.accessor?.user?.accountType == User.AccountType.ADMIN
+        }
+        exitWithFailureIfTrue("Workspace has been archived or deleted") {
+            input?.accessor?.workspace?.isArchived() == true
+                    || input?.accessor?.workspace?.isDeleted() == true
+        }
+        exitWithFailureIfTrue("Page has been deleted already") {
+            input?.entity?.isDeleted() == true
+        }
+        // ToDo: think about parent page inheritance
+        exitWithSuccessIfTrue("User / Member created this workspace") {
+            (input?.accessor?.user != null
+                    && input.accessor.user.uuid == input.entity?.creatorUUID)
+                    || (input?.accessor?.member != null
+                    && input.accessor.member.userUUID == input.entity?.creatorUUID)
+        }
+        exitWithSuccessIfTrue("Member has permission to delete this page") {
+            val effectivePermission = input?.accessor?.member?.effectivePermission()
+            effectivePermission?.hasWorkspacePermissionOrHigher(WorkspaceMember.Permissions.WorkspacePermission.CAN_ADMINISTRATE) == true
+                    || effectivePermission?.hasPagePermissionOrHigher(WorkspaceMember.Permissions.PagePermission.CAN_VIEW_CREATE_EDIT_DELETE) == true
+                    || (input?.accessor?.member?.userUUID == input?.entity?.creatorUUID
+                        && effectivePermission?.hasPagePermissionOrHigher(WorkspaceMember.Permissions.PagePermission.CAN_VIEW_CREATE) == true)
+        }
     }
 }
