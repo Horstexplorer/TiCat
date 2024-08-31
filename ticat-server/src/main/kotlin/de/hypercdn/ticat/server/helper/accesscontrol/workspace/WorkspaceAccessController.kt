@@ -9,7 +9,7 @@ import de.hypercdn.ticat.server.helper.accesscontrol.EntityAccessController
 import de.hypercdn.ticat.server.helper.accesscontrol.workspace.rules.*
 
 enum class WorkspaceExecutableAction : AccessRequest {
-    CREATE_WORKSPACE,
+    CREATE_WORKSPACE,           // create new workspace
     VIEW_WORKSPACE,             // view workspace details
     MODIFY_WORKSPACE,           // modify workspace details
     MODIFY_MEMBERS,             // invite and manage members, modify permissions
