@@ -6,36 +6,45 @@ import mu.two.KotlinLogging
 
 class ContextStopEvaluationException(description: String) : RuntimeExceptionWithoutStacktrace(description)
 
-class ConditionResult(val description: String, val success: Boolean)
+class ConditionResult(val description: String, val success: Boolean) {
+    var skip: Boolean = false
+    override fun toString(): String = "Condition: $description ${if (!skip) "($success)" else "(skip)"}"
+}
 
 interface RuleInput
+
+class EvaluationReport(private val ruleHint: String?, private val results: List<ConditionResult>) {
+    fun results(): List<ConditionResult> = results.toList()
+    fun failedConditions(): List<ConditionResult> = results .filter { !it.skip && !it.success }
+    fun booleanResult(): Boolean = results.any { !it.skip } && results.filter { !it.skip }.all { it.success }
+
+    override fun toString(): String = "Rule evaluation report:\n$ruleHint > success= ${booleanResult()})\n${results.joinToString("\n>", prefix = ">")}"
+}
 
 open class RuleContext<T>(val input: T?) where T : RuleInput {
 
     private val resultCache = ArrayList<ConditionResult>()
     private val logger: KLogger = KotlinLogging.logger {}
 
-    fun results(): List<ConditionResult> = resultCache.toList()
-    fun failedConditions(): List<ConditionResult> = resultCache.filter { !it.success }
-    fun booleanResult(): Boolean = resultCache.isNotEmpty() && resultCache.all { it.success }
-
     fun condition(
         description: String,
         conditionSucceedsWith: Boolean = true,
-        terminateIfNotSuccess: Boolean = true,
         terminateIfSuccess: Boolean = false,
+        terminateIfFailed: Boolean = false,
+        skipIfNoExit: Boolean = false,
         condition: () -> Boolean?
     ) {
         val result = registerResult(description, conditionSucceedsWith == condition())
         if (result.success) {
-            logger.trace { "Condition ${result.description} matched." }
+            logger.trace { "Condition ${description} matched." }
             if (terminateIfSuccess)
                 exitEvaluation("Caused by matching condition $description")
         } else {
             logger.trace { "Condition ${result.description} failed to match. ($conditionSucceedsWith was not ${!conditionSucceedsWith})" }
-            if (terminateIfNotSuccess)
+            if (terminateIfFailed)
                 exitEvaluation("Caused by failure to match condition $description")
         }
+        result.skip = skipIfNoExit
     }
 
     fun exitEvaluation(message: String = "No exit message specified") {
@@ -49,8 +58,9 @@ open class RuleContext<T>(val input: T?) where T : RuleInput {
         condition(
             description,
             conditionSucceedsWith = conditionSucceedsWith,
-            terminateIfNotSuccess = false,
             terminateIfSuccess = true,
+            terminateIfFailed = false,
+            skipIfNoExit = true,
             condition
         )
 
@@ -60,12 +70,15 @@ open class RuleContext<T>(val input: T?) where T : RuleInput {
     fun exitWithSuccessIfFalse(description: String, condition: () -> Boolean?) =
         exitWithSuccess(description, conditionSucceedsWith = false, condition)
 
+    fun exitWithSuccess(description: String = "Exit with success") = exitWithSuccessIfTrue(description){true}
+
     fun exitWithFailure(description: String, conditionSucceedsWith: Boolean = true, condition: () -> Boolean?) =
         condition(
             description,
             conditionSucceedsWith = conditionSucceedsWith,
-            terminateIfNotSuccess = true,
             terminateIfSuccess = false,
+            terminateIfFailed = true,
+            skipIfNoExit = true,
             condition
         )
 
@@ -75,16 +88,19 @@ open class RuleContext<T>(val input: T?) where T : RuleInput {
     fun exitWithFailureIfFalse(description: String, condition: () -> Boolean?) =
         exitWithFailure(description, conditionSucceedsWith = true, condition)
 
+    fun exitWithFailure(description: String = "Exit with failure") = exitWithFailureIfFalse(description){false}
+
+    fun asEvaluationResults() : EvaluationReport = EvaluationReport(this::class.simpleName, resultCache)
 }
 
 abstract class Rule<T, I> where T : RuleContext<I>, I : RuleInput {
 
-    fun evaluate(input: I?): Boolean {
+    fun evaluate(input: I?): EvaluationReport {
         val context = newContext(input)
         try {
             context.apply(definition())
         } catch (_: ContextStopEvaluationException) {}
-        return context.booleanResult()
+        return context.asEvaluationResults()
     }
 
     abstract fun newContext(input: I?): T
