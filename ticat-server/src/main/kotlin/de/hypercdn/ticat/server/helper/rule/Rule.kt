@@ -1,8 +1,8 @@
 package de.hypercdn.ticat.server.helper.rule
 
 import de.hypercdn.ticat.server.helper.exception.RuntimeExceptionWithoutStacktrace
-import mu.two.KLogger
-import mu.two.KotlinLogging
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ContextStopEvaluationException(description: String) : RuntimeExceptionWithoutStacktrace(description)
 

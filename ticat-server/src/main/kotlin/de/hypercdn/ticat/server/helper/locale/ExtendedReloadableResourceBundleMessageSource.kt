@@ -1,11 +1,11 @@
 package de.hypercdn.ticat.server.helper.locale
 
-import de.hypercdn.ticat.server.config.LocalizationConfig
-import de.hypercdn.ticat.server.config.MessageKeys
-import de.hypercdn.ticat.server.config.getMessage
+import de.hypercdn.ticat.server.config.messages.LocalizationConfig
+import de.hypercdn.ticat.server.config.messages.MessageKeys
+import de.hypercdn.ticat.server.config.messages.getMessage
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
-import mu.two.KLogger
-import mu.two.KotlinLogging
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import java.util.*
 import kotlin.collections.ArrayList

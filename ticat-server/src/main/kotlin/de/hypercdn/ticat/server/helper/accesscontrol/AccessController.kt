@@ -4,8 +4,8 @@ import de.hypercdn.ticat.server.helper.rule.EvaluationReport
 import de.hypercdn.ticat.server.helper.rule.Rule
 import de.hypercdn.ticat.server.helper.rule.RuleContext
 import de.hypercdn.ticat.server.helper.rule.RuleInput
-import mu.two.KLogger
-import mu.two.KotlinLogging
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 interface AccessRequest
 
@@ -39,7 +39,7 @@ abstract class AccessController<T, R, A> where R : AccessRequest, A : AccessorCo
         if (applicableRules.isNotEmpty()) {
             logger.debug{"Found ${applicableRules.size} access rules to match $request"}
         } else {
-            logger.warn("No access rules found for $request")
+            logger.warn { "No access rules found for $request" }
         }
         val evaluationReports = applicableRules.map { it.testGrant(instance, request, accessor) }
         logger.trace{ evaluationReports.joinToString { "\n" } }

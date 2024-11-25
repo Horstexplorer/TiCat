@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.data.sql.base.audit.Audit
 import de.hypercdn.ticat.server.data.sql.entities.message.Message
 import de.hypercdn.ticat.server.data.sql.entities.message.history.MessageHistory
-import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
-import de.hypercdn.ticat.server.data.sql.entities.workspace.history.WorkspaceHistory
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault

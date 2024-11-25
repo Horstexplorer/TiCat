@@ -11,9 +11,7 @@ import de.hypercdn.ticat.server.data.sql.entities.workspace.member.audit.Workspa
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
 import jakarta.persistence.*
 import jakarta.persistence.Table
-import lombok.NoArgsConstructor
 import org.hibernate.annotations.*
-import java.io.Serializable
 import java.time.OffsetDateTime
 import java.util.UUID
 

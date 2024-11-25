@@ -1,4 +1,4 @@
-package de.hypercdn.ticat.server.config
+package de.hypercdn.ticat.server.config.auth
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration

@@ -1,12 +1,10 @@
 package de.hypercdn.ticat.server.data.json.entities.page.history
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import de.hypercdn.ticat.server.data.json.entities.page.PageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
-import de.hypercdn.ticat.server.data.sql.entities.page.history.PageHistory
 import java.time.OffsetDateTime
 import java.util.*
 

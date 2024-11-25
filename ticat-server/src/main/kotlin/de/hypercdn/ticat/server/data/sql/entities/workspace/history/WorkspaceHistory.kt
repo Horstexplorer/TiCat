@@ -1,9 +1,7 @@
 package de.hypercdn.ticat.server.data.sql.entities.workspace.history
 
 import com.fasterxml.jackson.annotation.JsonFilter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import de.hypercdn.ticat.server.helper.OMIT_UNINITIALIZED_LATEINIT_FIELDS_FILTER
-import de.hypercdn.ticat.server.helper.constructor.CopyConstructable
 import de.hypercdn.ticat.server.data.sql.base.history.History
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import jakarta.persistence.*

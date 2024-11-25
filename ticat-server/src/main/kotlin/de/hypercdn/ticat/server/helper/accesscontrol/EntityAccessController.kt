@@ -7,7 +7,7 @@ abstract class EntityAccessController<T, A, E> : AccessController<T, A, E>() whe
 
     @PostConstruct
     private fun postInit() {
-        logger.info("Initializing entity access controller with ${accessRules.size} rules")
+        logger.info { "Initializing entity access controller with ${accessRules.size} rules" }
     }
 
 }

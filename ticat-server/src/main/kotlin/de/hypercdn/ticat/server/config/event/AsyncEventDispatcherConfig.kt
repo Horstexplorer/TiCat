@@ -1,8 +1,7 @@
-package de.hypercdn.ticat.server.config
+package de.hypercdn.ticat.server.config.event
 
-import lombok.extern.log4j.Log4j2
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.ApplicationEventMulticaster
@@ -14,7 +13,7 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor
 class AsyncEventDispatcherConfiguration {
 
     companion object {
-        var log: Logger = LoggerFactory.getLogger(AsyncEventDispatcherConfiguration::class.java)
+        var log: KLogger = KotlinLogging.logger {}
     }
 
     @Bean
@@ -22,7 +21,7 @@ class AsyncEventDispatcherConfiguration {
         return SimpleApplicationEventMulticaster().apply {
             setTaskExecutor(SimpleAsyncTaskExecutor())
             setErrorHandler {
-                log.error("Unhandled exception occurred while handling events", it)
+                log.error(it){"Unhandled exception occurred while handling events"}
             }
         }
     }

@@ -1,22 +1,16 @@
 package de.hypercdn.ticat.server.services
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import de.hypercdn.ticat.server.config.JwtConfig
+import de.hypercdn.ticat.server.config.auth.JwtConfig
 import de.hypercdn.ticat.server.data.sql.entities.user.GUEST_UUID
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.user.UserRepository
 import de.hypercdn.ticat.server.data.sql.entities.user.authcache.UserAuthCacheRepository
 import de.hypercdn.ticat.server.data.sql.entities.user.authcache.UserAuthCacheReference
-import jakarta.transaction.Transactional
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import lombok.extern.slf4j.Slf4j
-import mu.two.KLogger
-import mu.two.KotlinLogging
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.stereotype.Service
@@ -31,8 +25,7 @@ import java.util.*
 class UserManagementService(
     private val userRepository: UserRepository,
     private val userAuthCacheRepository: UserAuthCacheRepository,
-    private val jwtConfig: JwtConfig,
-    private val eventService: EventService
+    private val jwtConfig: JwtConfig
 ) {
 
     private val logger: KLogger = KotlinLogging.logger{}

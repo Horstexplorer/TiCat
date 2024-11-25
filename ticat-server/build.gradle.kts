@@ -2,11 +2,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.2.5"
-	id("io.spring.dependency-management") version "1.1.5"
-	kotlin("jvm") version "2.0.0"
-	kotlin("plugin.spring") version "2.0.0"
-	kotlin("plugin.jpa") version "2.0.0"
+	id("org.springframework.boot") version "3.4.0"
+	id("io.spring.dependency-management") version "1.1.6"
+	kotlin("jvm") version "2.0.21"
+	kotlin("plugin.spring") version "2.0.21"
+	kotlin("plugin.jpa") version "2.0.21"
 }
 
 group = "de.hypercdn.ticat"
@@ -41,19 +41,19 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 
-	implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
-	implementation("com.fasterxml.jackson.core:jackson-core:2.17.1")
-	implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
-	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.18.1")
+	implementation("com.fasterxml.jackson.core:jackson-core:2.18.1")
+	implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.1")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.1")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("com.google.guava:guava:33.2.0-jre")
-	implementation("org.springframework.vault:spring-vault-core:3.1.1")
+	implementation("com.google.guava:guava:33.3.1-jre")
+	implementation("org.springframework.vault:spring-vault-core:3.1.2")
 
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib")
-	implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
+	implementation("io.github.oshai:kotlin-logging:7.0.0")
 
 	compileOnly("org.projectlombok:lombok")
 

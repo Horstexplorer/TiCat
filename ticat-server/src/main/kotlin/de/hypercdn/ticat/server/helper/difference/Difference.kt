@@ -2,7 +2,7 @@ package de.hypercdn.ticat.server.helper.difference
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.Maps
-import de.hypercdn.ticat.server.config.configuredObjectMapper
+import de.hypercdn.ticat.server.config.mapping.configuredObjectMapper
 
 interface Difference {
     companion object {

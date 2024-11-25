@@ -1,4 +1,4 @@
-package de.hypercdn.ticat.server.config
+package de.hypercdn.ticat.server.config.messages
 
 import de.hypercdn.ticat.server.helper.locale.ExtendedReloadableResourceBundleMessageSource
 import de.hypercdn.ticat.server.helper.locale.YamlPropertiesLoader

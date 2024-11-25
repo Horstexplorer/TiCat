@@ -2,7 +2,6 @@ package de.hypercdn.ticat.server.data.sql.entities.page.audit
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
-import de.hypercdn.ticat.server.data.sql.base.audit.Audit
 import de.hypercdn.ticat.server.data.sql.base.audit.ParentedAudit
 import de.hypercdn.ticat.server.data.sql.entities.page.Page
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace

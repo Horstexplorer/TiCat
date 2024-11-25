@@ -1,13 +1,13 @@
 package de.hypercdn.ticat.server.services
 
-import de.hypercdn.ticat.server.config.LocalizationConfig
-import de.hypercdn.ticat.server.config.getMessage
+import de.hypercdn.ticat.server.config.messages.LocalizationConfig
+import de.hypercdn.ticat.server.config.messages.getMessage
 import de.hypercdn.ticat.server.data.sql.entities.user.User
 import de.hypercdn.ticat.server.data.sql.entities.workspace.Workspace
 import de.hypercdn.ticat.server.helper.locale.ExtendedReloadableResourceBundleMessageSource
 import de.hypercdn.ticat.server.helper.locale.asLanguageLocale
-import mu.two.KLogger
-import mu.two.KotlinLogging
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.context.NoSuchMessageException
 import org.springframework.stereotype.Component
 import java.util.*

@@ -2,11 +2,9 @@ package de.hypercdn.ticat.server.data.json.entities.ticket.history
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import de.hypercdn.ticat.server.data.json.entities.board.stage.BoardStageResponseJson
 import de.hypercdn.ticat.server.data.json.entities.ticket.TicketResponseJson
 import de.hypercdn.ticat.server.data.json.entities.user.UserResponseJson
 import de.hypercdn.ticat.server.data.sql.entities.ticket.Ticket
-import de.hypercdn.ticat.server.data.sql.entities.ticket.history.TicketHistory
 import java.time.OffsetDateTime
 import java.util.*
 

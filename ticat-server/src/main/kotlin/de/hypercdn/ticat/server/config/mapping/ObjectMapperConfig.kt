@@ -1,4 +1,4 @@
-package de.hypercdn.ticat.server.config
+package de.hypercdn.ticat.server.config.mapping
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
